@@ -1,0 +1,26 @@
+body {
+  background-color: #111;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  height: 100vh;
+  color: black;
+  font-family: 'Times New Roman', Times, serif;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#canvasContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+canvas {
+  background: #555;
+  
+}
