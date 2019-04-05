@@ -1,4 +1,6 @@
-var canvas = document.getElementById('canvas')
+var canvas = document.getElementById('canvas');
+const W = canvas.width;
+const H = canvas.height;
 var ctx = canvas.getContext('2d')
 
 const UPDATES_PER_SEC = 30;
