@@ -7,10 +7,14 @@ const TILESIZE = 16;
 const TILES = {
   '255,255,255,255' : null,
   '0,0,0,255' : 0,
+  '64, 64, 64, 255' : 1,
+  '127, 106, 0, 255' : 2
 };
 
 const tileImgIDs = [
-  "tile0"
+  "tile0",
+  "metal",
+  "wood"
 ]
 const tileImgs = []
 for (let imgID of tileImgIDs) {

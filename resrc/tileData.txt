@@ -3,8 +3,8 @@ Map Size = 48x32 tiles
 Tile Size = 16x16 pixels
 
 Tile Keys
- - metal.png = (64, 64, 64)
- - wood.png = (127, 106, 0)
+ - metal.png = (64, 64, 64, 255)
+ - wood.png = (127, 106, 0, 255)
 
 Places to steal from:
 - Bank
