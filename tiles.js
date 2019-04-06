@@ -26,6 +26,8 @@ const TILES = {
   '255,140,220,255' : 19,
   '10,0,0,255' : 20, //safe
   '20,0,0,255' : 21, //register
+  '170,0,0,255' : 22,
+  '0,21,145,255' : 23
 };
 
 const FLOORTILES = [1, 7, 12];
@@ -54,6 +56,8 @@ const tileImgIDs = [
   "stall",
   "safe-closed",
   "register-closed",
+  "container-red",
+  "container-blue",
 ]
 
 /////////////////////////////

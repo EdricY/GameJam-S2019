@@ -24,13 +24,10 @@ Tile Keys
  - stall.png = 255,140,220,255
  - Safe Closed-1.png.png = 10,0,0,255
  - Register Closed-1.png.png = 20,0,0,255
+ - container-red = 170,0,0,255
+ - container-blue = 0,21,145,255
 
 Places to steal from:
-- Mall
-	- Tile, solid color
-	- Plants
-	- Stores
-		- Shoes, clothing, games, coffee
 - Freighter
 	- Various color metal - red/blue accents
 	- Water
@@ -48,6 +45,11 @@ Places to steal from:
 	- Cages
 
 
+- Mall
+	- Tile, solid color
+	- Plants
+	- Stores
+		- Shoes, clothing, games, coffee
 - Store
 	- Tile - white marks
 	- Shelving
