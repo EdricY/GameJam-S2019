@@ -11,10 +11,35 @@
   <div id="menuDiv" class="outer">
       <h1>The Heist</h1>
       <button class="menuButton" onclick="showLanding()">Play!</button>
-      <button class="menuButton" onclick="showOptions()">Options</button>
+      <button class="menuButton" onclick="showInstructions()">Instructions</button>
+  </div>
+  <div id="instructionsDiv" class="outer nodisplay">
+      <h1>Hi, thanks for playing!</h1>
+      <div>
+        <input type="checkbox" id="holdCheckbox">
+        <label for="holdCheckbox">I have a cool keyboard</label>
+      </div>
+      <button class="menuButton" onclick="showMenu()">Menu</button>
+
   </div>
   <div id="landingDiv" class="outer nodisplay">
-    <button class="menuButton" onclick="showGame()">Go</button>
+    <div class="row" id="goDiv">
+      <div class="row justifystart">
+        <button class="menuButton" onclick="showMenu()">Menu</button>
+        <button class="menuButton" onclick="showUpgrades()">The Market</button>
+      </div>
+      <div class="row justifyend">
+        <canvas id="preview" width="768" height="512"></canvas>
+        <button id="goBtn" disabled class="menuButton" onclick="showGame()">Go!</button>
+      </div>
+    </div>
+    <div id="levelSquares">
+      <!-- <div class="square"><div>1</div></div> -->
+    </div>
+  </div>
+  <div id="upgradesDiv" class="outer nodisplay">
+    <h1>The Market</h1>
+    <button class="menuButton" onclick="showLanding()">Back</button>
   </div>
   <div id="canvasContainer" class="outer nodisplay">
     <canvas id="canvas" width="768" height="512"></canvas>
@@ -32,6 +57,7 @@
 <img hidden id='tile0' src='resrc/tile0.png' alt='img'>
 <img hidden id='metal' src='resrc/metal.png' alt='img'>
 <img hidden id='wood' src='resrc/wood.png' alt='img'>
+<img hidden id='wood_2' src='resrc/wood_2.png' alt='img'>
 <img hidden id='wooda' src='resrc/wooda.png' alt='img'>
 <img hidden id='woodb' src='resrc/woodb.png' alt='img'>
 <img hidden id='wood-door' src='resrc/Wood Door-1.png.png' alt='img'>
@@ -49,9 +75,9 @@
 <img hidden id='teller-down' src='resrc/teller-down.png' alt='img'>
 
 <script src="gamesetup.js" defer></script>
-<script src="state.js" defer></script>
 <script src="input.js" defer></script>
 <script src="tiles.js" defer></script>
+<script src="state.js" defer></script>
 <script src="lockpick.js" defer></script>
 <script src="player.js" defer></script>
 <script src="ai.js" defer></script>

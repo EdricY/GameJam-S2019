@@ -1,24 +1,8 @@
-
-var mapLoader = document.getElementById('mapLoader');
-var ml_ctx = mapLoader.getContext('2d');
-
-var collisionCanvas = document.getElementById('collisionCanvas');
-var collisionctx = collisionCanvas.getContext('2d');
-
-var floorCanvas = document.getElementById('floorCanvas');
-var floorctx = floorCanvas.getContext('2d');
-
-
-var recentFloorTileID = 1;
-
-const TILESIZE = 16;
-const MAPW = 48;
-const MAPH = 32;
-
 const TILES = {
   '255,255,255,255': null,
   '0,0,0,255': 0,
   '64,64,64,255': 1,
+  // '66,66,66,255': 1, //ff
   '127,106,0,255': 2,
   '127,51,0,255' : 3,
   '255,0,0,255' : 4,
@@ -26,8 +10,11 @@ const TILES = {
   '127,51,2,255' : 6,
   '181,181,181,255' : 7,
   '127,106,10,255': 8,
+  '125,104,34,255': 8, //ff
   '127,106,20,255': 9,
+  '125,104,39,255': 9, //ff
   '127,51,10,255' : 10,
+  // '123,54,26,255' : 10, //ff
   '0,255,255,255' : 11,
   '255,106,0,255' : 12,
   '107,42,0,255' : 13,
@@ -55,10 +42,46 @@ const tileImgIDs = [
   "teller-left",
   "teller-down"
 ]
+
+/////////////////////////////
+
+var mapLoader = document.getElementById('mapLoader');
+var ml_ctx = mapLoader.getContext('2d');
+
+var collisionCanvas = document.getElementById('collisionCanvas');
+var collisionctx = collisionCanvas.getContext('2d');
+
+var floorCanvas = document.getElementById('floorCanvas');
+var floorctx = floorCanvas.getContext('2d');
+
+ml_ctx.imageSmoothingEnabled = false;
+ml_ctx.webkitImageSmoothingEnabled = false;
+ml_ctx.msImageSmoothingEnabled = false;
+collisionctx.imageSmoothingEnabled = false;
+collisionctx.webkitImageSmoothingEnabled = false;
+collisionctx.msImageSmoothingEnabled = false;
+floorctx.imageSmoothingEnabled = false;
+floorctx.webkitImageSmoothingEnabled = false;
+floorctx.msImageSmoothingEnabled = false;
+
+var recentFloorTileID = 1;
+
+const TILESIZE = 16;
+const MAPW = 48;
+const MAPH = 32;
+
 const tileImgs = []
 for (let imgID of tileImgIDs) {
   tileImgs.push(document.getElementById(imgID))
 }
+
+const TILECOLORS = []
+
+for (let colorstr in TILES) {
+  let arr = getColorArr(colorstr);
+  TILECOLORS.push(arr)
+}
+
 
 function setMapData(imgID) {
   mapData = getMapData(imgID);
@@ -92,7 +115,8 @@ function getMapData(imgID) {
     for (let col = 0; col < w; col++) {
       let pos = 4 * (col + row * w);
       let colorstr = raw_data.slice(pos, pos + 4).toString();
-      let tileid = TILES[colorstr];
+      let tileid = getTileID(colorstr);
+      if (tileid === undefined) console.log(colorstr)
       data[row].push(tileid);
     }
   }
@@ -150,6 +174,40 @@ function getTileFromPos(mapData, x, y) {
   let r = Math.floor(y / TILESIZE);
   let c = Math.floor(x / TILESIZE);
   if (r < 0 || c < 0) return null;
-  if (r > MAPH || c > MAPW) return null;
+  if (r >= MAPH || c >= MAPW) return null;
   return mapData[r][c]
+}
+
+function getTileID(colorstr) {
+  let tileid = TILES[colorstr];
+  if (tileid) return tileid;
+  //find closest
+  let colorarr1 = getColorArr(colorstr);
+  let min = 10000;
+  let mindex = 0;
+  let len = TILECOLORS.length;
+  for (let i = 0; i < len; i++) {
+    let dist = getColorDist(colorarr1, TILECOLORS[i]);
+    if (dist < min) {
+      min = dist;
+      mindex = i;
+    }
+  }
+  colorstr = TILECOLORS[mindex].toString();
+  return TILES[colorstr];
+}
+
+function getColorDist(colorarr1, colorarr2) {
+  let dist = 0;
+  dr = colorarr1[0] - colorarr2[0]
+  dg = colorarr1[1] - colorarr2[1]
+  db = colorarr1[2] - colorarr2[2]
+  dist = dr*dr + dg*dg + db*db;
+  return dist;
+}
+
+function getColorArr(colorstr) {
+  let arr = colorstr.split(',');
+  for (let i in arr) arr[i] = Number(arr[i]);
+  return arr;
 }

@@ -1,12 +1,25 @@
 const canvas = document.getElementById('canvas');
 const W = canvas.width;
 const H = canvas.height;
-const ctx = canvas.getContext('2d')
-
+const ctx = canvas.getContext('2d');
+ctx.textAlign = "center";
+ctx.textBaseLine = "middle";
 var mapData = [];
 var collisionMap = [];
 var gameState = {};
 
+const MAPIDS = [
+  "map0",
+  "map1",
+  "map2",
+  "map3",
+  "map4",
+  "map5",
+  "map5",
+  "map5",
+  "map5",
+  "map5",
+]
 
 //returns x where min <= x < max
 function randInt(min, max) {

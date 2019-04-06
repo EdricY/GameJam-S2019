@@ -1,5 +1,5 @@
 
-const UPDATES_PER_SEC = 80;
+const UPDATES_PER_SEC = 60;
 const MS_PER_UPDATE = 1000 / UPDATES_PER_SEC;
 var lastTime = Date.now();
 var lag = 0;
@@ -10,13 +10,13 @@ var lockpickWindow;
 
 
 function gameInit() {
-  setMapData("map3");
-  lockpickWindow = new LockpickWindow(6); // remove me
-  // lockpickWindow.active = false // remove me
+  // setMapData("map3");
+  lockpickWindow = new LockpickWindow(6, ()=>player.inventory = 20); // remove me
+  lockpickWindow.active = false // remove me
   makeEnemies(3)
 }
 
-gameInit();
+// gameInit();
 
 function gameDraw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
