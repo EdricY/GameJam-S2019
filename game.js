@@ -8,7 +8,7 @@ var redraw = false;
 var player = new Player();
 
 function gameInit() {
-  setMapData("map2");
+  setMapData("map3");
 }
 
 gameInit();
