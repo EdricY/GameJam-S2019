@@ -22,7 +22,7 @@ function Enemy(x, y) {
   this.timer = randInt(5, 35);
   this.theta = Math.random() * TAU - PI;
   this.thetaGoal = this.theta;
-  this.basespeed = 3;
+  this.basespeed = 0;
   this.animationFrame = 0;
   this.speed = this.basespeed;
   this.rotateDirection = getRotationDirection();
@@ -53,6 +53,12 @@ function Enemy(x, y) {
 
     if (this.withinVisibility(player)) {
       this.shootLOSBullets();
+    }
+    let dx = player.x - this.x;
+    let dy = player.y - this.y;
+    let distSq = dx*dx + dy*dy;
+    if (distSq < 32*32) {
+      alarm = true;
     }
 
 
@@ -136,16 +142,14 @@ function Enemy(x, y) {
 
   this.shootLOSBullets = function() {
     let pt = {x:player.x, y:player.y}
-    this.losBullets.push(new LOSBullet(this.x, this.y, pt, this));
-    pt.x+=1
-    this.losBullets.push(new LOSBullet(this.x, this.y, pt, this));
-    pt.x-=1
-    this.losBullets.push(new LOSBullet(this.x, this.y, pt, this));
-    pt.x+=1
-    pt.y+=1
-    this.losBullets.push(new LOSBullet(this.x, this.y, pt, this));
-    pt.y-=1
-    this.losBullets.push(new LOSBullet(this.x, this.y, pt, this));
+    let dx = player.x - this.x
+    let dy = player.y - this.y
+    let theta = Math.atan2(dy,dx);
+    this.losBullets.push(new LOSBullet(this.x, this.y, theta, this));
+    this.losBullets.push(new LOSBullet(this.x, this.y, theta + TAU/32, this));
+    this.losBullets.push(new LOSBullet(this.x, this.y, theta + TAU/64, this));
+    this.losBullets.push(new LOSBullet(this.x, this.y, theta - TAU/32, this));
+    this.losBullets.push(new LOSBullet(this.x, this.y, theta - TAU/64, this));
 
   }
 
@@ -156,7 +160,9 @@ function Enemy(x, y) {
   }
 
   this.losNotify = function() {
-    alarm = true;
+    if (this.withinVisibility(player)) {
+      alarm = true;
+    }
   }
 
   this.drawVisibility = function(ctx) {
@@ -197,20 +203,18 @@ function Enemy(x, y) {
   }
 }
 
-function LOSBullet(x, y, pt, owner) {
+function LOSBullet(x, y, theta, owner) {
   this.x = x;
   this.y = y;
-  let dx = pt.x - x;
-  let dy = pt.y - y;
-  let hyp = dx*dx + dy*dy;
-  this.vx = dx / hyp;
-  this.vy = dy / hyp;
-  this.speed = 12;
+  this.theta = theta;
+  this.speed = 14;
   this.owner = owner;
   this.dist = 0;
   this.update = function() {
-    this.x += this.vx;
-    this.y += this.vy;
+    let vx = this.speed * Math.cos(this.theta);
+    let vy = this.speed * Math.sin(this.theta);
+    this.x += vx;
+    this.y += vy;
     this.dist += this.speed;
     if (this.intersectsPlayer()) {
       this.owner.losNotify();
