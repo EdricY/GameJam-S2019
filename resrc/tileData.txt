@@ -1,0 +1,44 @@
+Map Size = 48x32 tiles
+
+Tile Size = 16x16 pixels
+
+Tile Keys
+ - metal.png = (64, 64, 64)
+ - wood.png = (127, 106, 0)
+
+Places to steal from:
+- Bank
+	- Windows
+	- Tile - checker
+	- Teller desks
+	- Vault
+- Warehouse
+	- Grayscale
+	- Wood
+	- Metal
+- Freighter
+	- Various color metal - red/blue accents
+	- Water
+- Mansion
+	- Marble - white/gold
+	- Carpet - dark red
+- Store
+	- Tile
+	- Shelving
+- Mall
+	- Tile, solid color
+	- Plants
+	- Stores
+		- Shoes, clothing, games, coffee
+- Ship
+	- Water
+	- Wood
+- Casino
+	- Carpet - dark red patterns???
+	- Slot machines/roulette table
+- Museum
+	- Displays
+	- Paintings
+- Plane
+	- Cargo - dark green/brown, tarps
+	- Cages
