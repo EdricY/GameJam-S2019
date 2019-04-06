@@ -25,18 +25,36 @@ const PLAYERBAGIMGS = [
   document.getElementById("player_bag_3")
 ]
 
-function Player() {
-  this.x = 140;
-  this.y = 100;
+const playerCanvas = document.getElementById("playerCanvas");
+const playerctx = playerCanvas.getContext('2d');
+const tempCanvas = document.getElementById("tempCanvas");
+const tempctx = tempCanvas.getContext('2d');
+
+
+function Player(x, y) {
+  this.x = x;
+  this.y = y;
   this.vx = 0;
   this.vy = 0;
+  this.stamina = 120;
   this.speed = 4;
+  this.basespeed = 4;
+  this.speedy = false;
   this.animationFrame = 0;
   this.inventory = 0;
   this.theta = 0;
   this.message = "";
+  this.actionTarget = null;
   this.draw = (ctx) => drawPlayer(ctx, this);
   this.update = function () {
+    if (lockpickWindow.active) return;
+    if (keys[90]) { //Z
+      this.speedy = true;
+      this.speed = this.basespeed * 1.5;
+    } else {
+      this.speedy = false;
+      this.speed = this.basespeed;
+    }
     if (keys[UP]) {
       this.vy = -this.speed;
     } else if (keys[DOWN]) {
@@ -104,6 +122,19 @@ function Player() {
         this.x = x_cls.x+PHSZ;
       }
     }
+
+    //interactions
+    if (this.inventory) return;
+    this.actionTarget = closestInteractionObject(this);
+    if (this.actionTarget) {
+      this.message = "Lockpick [Space]";
+      if (keys[32] && !lastKeys[32]) {
+        this.message = "";
+        this.actionTarget.interact();
+      }
+    } else {
+      this.message = "";
+    }
   }
 }
 
@@ -117,12 +148,31 @@ function drawPlayer(ctx, player) {
   let img = PLAYERIMGS[frame];
   let rotation = player.theta + PI/2;
   if (player.inventory) img = PLAYERBAGIMGS[frame];
-  ctx.translate(f_x, f_y);
-  ctx.rotate(rotation);
-  ctx.drawImage(img, -PLAYERSIZE, -PLAYERSIZE);
-  ctx.resetTransform();
+
+  if (player.speedy) {
+    tempctx.globalAlpha = 1;
+    tempctx.globalCompositeOperation = 'source-over';
+    tempctx.drawImage(playerCanvas, 0, 0);
+    tempctx.globalAlpha = .3;
+    tempctx.globalCompositeOperation = 'source-atop';
+    tempctx.drawImage(floorCanvas, 0, 0);
+    tempctx.drawImage(collisionCanvas, 0, 0);
+    playerctx.clearRect(0, 0, W, H)
+    playerctx.drawImage(tempCanvas, 0, 0)
+    playerctx.globalAlpha = 1;
+
+  } else {
+    tempctx.clearRect(0, 0, W, H)
+    playerctx.clearRect(0, 0, W, H)
+  }
+  playerctx.translate(f_x, f_y);
+  playerctx.rotate(rotation);
+  playerctx.drawImage(img, -PLAYERSIZE, -PLAYERSIZE);
+  playerctx.resetTransform();
+  ctx.drawImage(playerCanvas, 0, 0)
 
   ctx.fillStyle = "black"
+  ctx.font = "14px serif"
   ctx.fillText(player.message, f_x, f_y - PLAYERSIZE)
 }
 
@@ -132,6 +182,24 @@ function getLocalTiles(player) {
   bl = getTileFromPos(mapData, player.x - PHSZ, player.y + PHSZ - 1);
   br = getTileFromPos(mapData, player.x + PHSZ - 1, player.y + PHSZ - 1);
   return [tl, tr, bl, br];
+}
+
+function closestInteractionObject(player, reach=32) {
+  let mindist = 1000000000;
+  let closest = null;
+  let len = interactionObjects.length;
+  for (let i = 0; i < len; i++) {
+    if (interactionObjects[i].done) continue;
+    let dx = interactionObjects[i].x - player.x;
+    let dy = interactionObjects[i].y - player.y;
+    let dist = dx*dx + dy*dy;
+    if (dist < mindist) {
+      mindist = dist;
+      closest = interactionObjects[i];
+    }
+  }
+  if (mindist > reach * reach) return null;
+  return closest;
 }
 
 // collision stuff

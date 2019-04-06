@@ -107,7 +107,9 @@ for (let colorstr in TILES) {
 
 
 function setMapData(imgID) {
+  mapID = Number(imgID.substr(3)); //maps must be named map##
   mapData = getMapData(imgID);
+  interactionObjects = [];
   collisionctx.clearRect(0, 0, collisionCanvas.width, collisionCanvas.height);
   drawMapData(collisionctx, mapData, true)
   let raw_collision_data = collisionctx.getImageData(0, 0, W, H);
@@ -120,7 +122,6 @@ function setMapData(imgID) {
       collisionMap[y].push(raw_collision_data[pos] > 0)
     }
   }
-
   fillMap(floorctx, recentFloorTileID);
   drawFloorData(floorctx, mapData);
 }
@@ -157,6 +158,11 @@ function drawMapData(ctx, mapData, removeFloor=false) {
       if (removeFloor && FLOORTILES.includes(tileID)) {
         recentFloorTileID = tileID;
         continue;
+      }
+      if (LOCKEDTILES.includes(tileID)) {
+        interactionObjects.push(
+          new LockBox(col * TILESIZE + TILESIZE/2, row * TILESIZE + TILESIZE/2)
+        );
       }
       ctx.drawImage(tileImg, col * TILESIZE, row * TILESIZE);
     }
