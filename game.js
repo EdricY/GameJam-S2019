@@ -46,12 +46,12 @@ function tick() {
   lastTime = current;
   lag += elapsed;
   while (lag >= MS_PER_UPDATE) {
-    gameUpdate();
+    gameState.update();
     lag -= MS_PER_UPDATE;
     redraw = true;
   }
   if (redraw) {
-    gameDraw();
+    gameState.draw();
     redraw = false;
   }
   requestAnimationFrame(tick);

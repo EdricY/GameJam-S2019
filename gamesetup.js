@@ -2,8 +2,10 @@ const canvas = document.getElementById('canvas');
 const W = canvas.width;
 const H = canvas.height;
 const ctx = canvas.getContext('2d')
+
 var mapData = [];
 var collisionMap = [];
+var gameState = {};
 
 
 //returns x where min <= x < max
@@ -15,10 +17,10 @@ function randInt(min, max) {
 function shuffle(a) {
   let j, x, i;
   for (i = a.length - 1; i > 0; i--) {
-      j = Math.floor(Math.random() * (i + 1));
-      x = a[i];
-      a[i] = a[j];
-      a[j] = x;
+    j = Math.floor(Math.random() * (i + 1));
+    x = a[i];
+    a[i] = a[j];
+    a[j] = x;
   }
   return a;
 }

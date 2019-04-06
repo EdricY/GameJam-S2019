@@ -53,6 +53,7 @@ function LockpickWindow(numPins) {
               lockPickProgress++;
             }
           } else if (keys[keycode]) {
+            this.chambers[lockPickProgress].pulse();
             lockPickProgress = 0;
           }
         }
@@ -62,7 +63,10 @@ function LockpickWindow(numPins) {
         let keycode = customKeycodes[i-1];
         if (keys[keycode] && !lastKeys[keycode]) {
           if (i == next) lockPickProgress++;
-          else lockPickProgress = 0;
+          else { 
+            this.chambers[lockPickProgress].pulse();
+            lockPickProgress = 0;
+          }
         }
       }
     }
@@ -86,9 +90,14 @@ function LockChamber(x, seq) {
   this.pinY = this.pinStart;
   this.pinYGoal = this.pinY;
   this.x = x;
+  this.pulseTimer = 0;
   this.draw = function (ctx) {
+    let pinX = this.x;
+    if (this.pulseTimer) {
+      pinX += -1*Math.cos(1024*this.pulseTimer)
+    }
     ctx.drawImage(lockchamber, this.x, this.y)
-    ctx.drawImage(lockpin, this.x, this.pinY)
+    ctx.drawImage(lockpin, pinX, this.pinY)
   }
 
   this.update = function() {
@@ -98,5 +107,10 @@ function LockChamber(x, seq) {
     if (Math.abs(diff) < 2) this.pinY = this.pinYGoal;
     else this.pinY += 2*Math.sign(diff);
 
+    this.pulseTimer = Math.max(0, this.pulseTimer-1);
+  }
+  
+  this.pulse = function () {
+    this.pulseTimer = 15;
   }
 }

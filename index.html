@@ -8,7 +8,15 @@
 </head>
 
 <body>
-  <div id="canvasContainer">
+  <div id="menuDiv" class="outer">
+      <h1>The Heist</h1>
+      <button class="menuButton" onclick="showLanding()">Play!</button>
+      <button class="menuButton" onclick="showOptions()">Options</button>
+  </div>
+  <div id="landingDiv" class="outer nodisplay">
+    <button class="menuButton" onclick="showGame()">Go</button>
+  </div>
+  <div id="canvasContainer" class="outer nodisplay">
     <canvas id="canvas" width="768" height="512"></canvas>
   </div>
 </body>
@@ -41,6 +49,7 @@
 <img hidden id='teller-down' src='resrc/teller-down.png' alt='img'>
 
 <script src="gamesetup.js" defer></script>
+<script src="state.js" defer></script>
 <script src="input.js" defer></script>
 <script src="tiles.js" defer></script>
 <script src="lockpick.js" defer></script>

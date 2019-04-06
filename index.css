@@ -4,7 +4,7 @@ body {
   border: 0;
   padding: 0;
   height: 100vh;
-  color: black;
+  color: white;
   font-family: 'Times New Roman', Times, serif;
   display: flex;
   flex-flow: column;
@@ -12,12 +12,31 @@ body {
   align-items: center;
 }
 
-#canvasContainer {
+#menuDiv {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.menuButton {
+  margin: 15px;
+  padding: 5px;
+  width: 200px;
+  background-color: #DDD; 
+  border: #999 solid 3px;
+  border-radius: 20px;
+}
+
+.outer {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
+}
 
+.nodisplay {
+  display: none !important;
 }
 
 canvas {
