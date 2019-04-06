@@ -8,6 +8,7 @@ Tile Keys
  - wooda.png = 127,106,10,255
  - woodb.png = 127,106,20,255
  - Wood Door-1.png.png = 127,51,0,255
+ - wood-door-down.png = 127,51,10,255
  - shelf-v.png = 127,51,1,255
  - shelf-h.png = 127,51,2,255
  - tile-white.png = 181,181,181,255
@@ -15,25 +16,15 @@ Tile Keys
 
 Places to steal from:
 - Bank
-	- Windows
 	- Tile - checker
 	- Teller desks
 	- Vault
-- Warehouse
-	- Grayscale
-	- Wood
-	- Metal
-	- Safe
 - Freighter
 	- Various color metal - red/blue accents
 	- Water
 - Mansion
 	- Marble - white/gold
 	- Carpet - dark red
-- Store
-	- Tile - white marks
-	- Shelving
-	- Register
 - Mall
 	- Tile, solid color
 	- Plants
@@ -46,8 +37,17 @@ Places to steal from:
 	- Carpet - dark red patterns???
 	- Slot machines/roulette table
 - Museum
-	- Displays
-	- Paintings
+	- Glass displays
+	- Big dino
 - Plane
 	- Cargo - dark green/brown, tarps
 	- Cages
+- Store
+	- Tile - white marks
+	- Shelving
+	- Register
+- Warehouse
+	- Grayscale
+	- Wood
+	- Metal
+	- Safe
