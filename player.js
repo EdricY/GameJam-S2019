@@ -11,36 +11,56 @@ const DOWN = 40
 const LEFT = 37
 const RIGHT = 39
 
+const PLAYERIMGS = [
+  document.getElementById("player_0"),
+  document.getElementById("player_1"),
+  document.getElementById("player_2"),
+  document.getElementById("player_3")
+]
+
+const PLAYERBAGIMGS = [
+  document.getElementById("player_bag_0"),
+  document.getElementById("player_bag_1"),
+  document.getElementById("player_bag_2"),
+  document.getElementById("player_bag_3")
+]
+
 function Player() {
   this.x = 140;
   this.y = 100;
   this.vx = 0;
   this.vy = 0;
-  this.speed = 5;
-  this.color = "red";
+  this.speed = 4;
   this.animationFrame = 0;
   this.inventory = 0;
-  this.facing = 0;
-  this.message = "hello world";
+  this.theta = 0;
+  this.message = "";
   this.draw = (ctx) => drawPlayer(ctx, this);
   this.update = function () {
     if (keys[UP]) {
       this.vy = -this.speed;
-      this.facing = UP;
     } else if (keys[DOWN]) {
       this.vy = this.speed;
-      this.facing = DOWN;
     } else {
       this.vy = 0;
     }
     if (keys[LEFT]) {
       this.vx = -this.speed;
-      this.facing = LEFT;
     } else if (keys[RIGHT]) {
       this.vx = this.speed;
-      this.facing = RIGHT;
     } else {
       this.vx = 0;
+    }
+
+    //do animation
+    if (this.vy == 0 && this.vx == 0) {
+      this.animationFrame = 0;
+    } else {
+      this.theta = Math.atan2(this.vy, this.vx);
+      this.animationFrame += .2;
+      if (this.animationFrame >= 4){
+        this.animationFrame = 0;
+      }
     }
 
     if (this.vy != 0 && this.vx != 0) {
@@ -84,18 +104,26 @@ function Player() {
         this.x = x_cls.x+PHSZ;
       }
     }
-
   }
 }
 
 function drawPlayer(ctx, player) {
-  ctx.fillStyle = player.color;
-  if (player.inventory) ctx.fillStyle = 'green';
-  let left = player.x - PHSZ;
-  let top = player.y - PHSZ;
-  ctx.fillRect(left, top, PLAYERSIZE, PLAYERSIZE);
+  let f_x = Math.round(player.x)
+  let f_y = Math.round(player.y)
+  let left = f_x - PLAYERSIZE; //awkward
+  let top = f_y - PLAYERSIZE;
+  // ctx.fillRect(left, top, PLAYERSIZE, PLAYERSIZE);
+  let frame = Math.floor(player.animationFrame);
+  let img = PLAYERIMGS[frame];
+  let rotation = player.theta + PI/2;
+  if (player.inventory) img = PLAYERBAGIMGS[frame];
+  ctx.translate(f_x, f_y);
+  ctx.rotate(rotation);
+  ctx.drawImage(img, -PLAYERSIZE, -PLAYERSIZE);
+  ctx.resetTransform();
+
   ctx.fillStyle = "black"
-  ctx.fillText(player.message, player.x, player.y - PLAYERSIZE)
+  ctx.fillText(player.message, f_x, f_y - PLAYERSIZE)
 }
 
 function getLocalTiles(player) {
