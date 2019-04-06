@@ -24,6 +24,7 @@ const TILES = {
   '181,181,181,255' : 7,
   '127,106,10,255': 8,
   '127,106,20,255': 9,
+  '127,51,10,255' : 10,
 };
 
 const FLOORTILES = [1];
@@ -38,7 +39,8 @@ const tileImgIDs = [
   "shelf-h",
   "tile-white",
   "wooda",
-  "woodb"
+  "woodb",
+  "wood-door-down"
 ]
 const tileImgs = []
 for (let imgID of tileImgIDs) {
