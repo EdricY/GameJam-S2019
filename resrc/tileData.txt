@@ -6,6 +6,10 @@ Tile Keys
  - metal.png = 64,64,64,255
  - wood.png = 127,106,0,255
  - Wood Door-1.png.png = 127,51,0,255
+ - shelf-v.png = 127,51,1,255
+ - shelf-h.png = 127,51,2,255
+ - tile-white.png = 181,181,181,255
+ - counter.png = 255,0,0,255
 
 Places to steal from:
 - Bank
@@ -24,9 +28,10 @@ Places to steal from:
 	- Marble - white/gold
 	- Carpet - dark red
 - Store
-	- Tile - wahite marks
+	- Tile - white marks
 	- Shelving
-	-  
+	- Register
+	- 
 - Mall
 	- Tile, solid color
 	- Plants
