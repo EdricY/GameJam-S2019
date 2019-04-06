@@ -7,12 +7,13 @@ const PHSZ = PLAYERHALFSIZE;
 const SQRT2 = Math.sqrt(2);
 
 function Player() {
-  this.x = 100;
+  this.x = 140;
   this.y = 100;
   this.vx = 0;
   this.vy = 0;
   this.speed = 5;
   this.color = "red";
+  this.animationFrame = 0;
   this.draw = (ctx) => drawPlayer(ctx, this);
   this.update = function () {
     if (keys[37]) { //left
@@ -89,12 +90,14 @@ function getLocalTiles(player) {
   return [tl, tr, bl, br];
 }
 
+// collision stuff
+
 /* returns Point(x,y)
  * y: suggested relocation
  * x: collision position
  */
 function findYCollisionDown(y, vy, x, width, height) {
-  vy = Math.round(vy);
+  vy = Math.ceil(vy);
   if (vy <= 0) return null;
   y = Math.floor(y);
   x = Math.floor(x);
@@ -110,7 +113,7 @@ function findYCollisionDown(y, vy, x, width, height) {
   return null;
 }
 function findYCollisionUp(y, vy, x, width, height) {
-  vy = Math.round(vy);
+  vy = Math.floor(vy);
   if (vy >= 0) return null;
   y = Math.floor(y);
   x = Math.floor(x);
@@ -129,7 +132,7 @@ function findYCollisionUp(y, vy, x, width, height) {
 * x: suggested relocation
 */
 function findXCollisionRight(x, vx, y, width, height) {
-  vx = Math.round(vx);
+  vx = Math.ceil(vx);
   if (vx <= 0) return null;
   x = Math.floor(x);
   y = Math.floor(y);
@@ -145,7 +148,7 @@ function findXCollisionRight(x, vx, y, width, height) {
   return null
 }
 function findXCollisionLeft(x, vx, y, width, height) {
-  vx = Math.round(vx);
+  vx = Math.floor(vx);
   if (vx >= 0) return null;
   x = Math.floor(x);
   y = Math.floor(y);

@@ -2,11 +2,14 @@
 var mapLoader = document.getElementById('mapLoader');
 var ml_ctx = mapLoader.getContext('2d');
 
-var mapCanvas = document.getElementById('mapCanvas');
-var mapctx = mapCanvas.getContext('2d');
-mapctx.fillStyle = "red";
-mapctx.fillRect(0, 0, 500, 500)
+var collisionCanvas = document.getElementById('collisionCanvas');
+var collisionctx = collisionCanvas.getContext('2d');
 
+var floorCanvas = document.getElementById('floorCanvas');
+var floorctx = floorCanvas.getContext('2d');
+
+
+var recentFloorTileID = 1;
 
 const TILESIZE = 16;
 const MAPW = 48;
@@ -27,7 +30,7 @@ const TILES = {
   '127,51,10,255' : 10,
 };
 
-const FLOORTILES = [1];
+const FLOORTILES = [1, 7];
 
 const tileImgIDs = [
   "tile0",
@@ -49,9 +52,9 @@ for (let imgID of tileImgIDs) {
 
 function setMapData(imgID) {
   mapData = getMapData(imgID);
-  mapctx.clearRect(0, 0, mapCanvas.width, mapCanvas.height);
-  drawMap(mapctx, mapData, true)
-  let raw_collision_data = mapctx.getImageData(0, 0, W, H);
+  collisionctx.clearRect(0, 0, collisionCanvas.width, collisionCanvas.height);
+  drawMapData(collisionctx, mapData, true)
+  let raw_collision_data = collisionctx.getImageData(0, 0, W, H);
   raw_collision_data = raw_collision_data.data;
   collisionMap = [];
   for (let y = 0; y < H; y++) {
@@ -62,6 +65,8 @@ function setMapData(imgID) {
     }
   }
 
+  fillMap(floorctx, recentFloorTileID);
+  drawFloorData(floorctx, mapData);
 }
 
 function getMapData(imgID) {
@@ -84,7 +89,7 @@ function getMapData(imgID) {
   return data;
 }
 
-function drawMap(ctx, mapData, removeFloor=false) {
+function drawMapData(ctx, mapData, removeFloor=false) {
   let rl = mapData.length;
   let cl = mapData[0].length;
   for (let row = 0; row < rl; row++) {
@@ -93,8 +98,35 @@ function drawMap(ctx, mapData, removeFloor=false) {
       if (tileID == null) continue;
       let tileImg = getTileImg(tileID);
       if (removeFloor && FLOORTILES.includes(tileID)) {
+        recentFloorTileID = tileID;
         continue;
       }
+      ctx.drawImage(tileImg, col * TILESIZE, row * TILESIZE);
+    }
+  }
+}
+
+function drawFloorData(ctx, mapData) {
+  let rl = mapData.length;
+  let cl = mapData[0].length;
+  for (let row = 0; row < rl; row++) {
+    for (let col = 0; col < cl; col++) {
+      let tileID = mapData[row][col];
+      if (tileID == null) continue;
+      let tileImg = getTileImg(tileID);
+      if (FLOORTILES.includes(tileID)) {
+        ctx.drawImage(tileImg, col * TILESIZE, row * TILESIZE);
+      }
+    }
+  }
+}
+
+function fillMap(ctx, tileID) {
+  let rl = mapData.length;
+  let cl = mapData[0].length;
+  for (let row = 0; row < rl; row++) {
+    for (let col = 0; col < cl; col++) {
+      let tileImg = getTileImg(tileID);
       ctx.drawImage(tileImg, col * TILESIZE, row * TILESIZE);
     }
   }

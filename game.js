@@ -1,28 +1,43 @@
 
-const UPDATES_PER_SEC = 30;
+const UPDATES_PER_SEC = 60;
 const MS_PER_UPDATE = 1000 / UPDATES_PER_SEC;
 var lastTime = Date.now();
 var lag = 0;
 var redraw = false;
 
 var player = new Player();
+var lockpickWindow;
+
 
 function gameInit() {
   setMapData("map3");
+  lockpickWindow = new LockpickWindow(4); // remove me
+  lockpickWindow.active = false // remove me
+  makeEnemies(3)
 }
 
 gameInit();
 
 function gameDraw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawMap(ctx, mapData);
+  ctx.drawImage(floorCanvas, 0, 0);
+  ctx.drawImage(collisionCanvas, 0, 0);
   player.draw(ctx);
+  for (let en of enemies) {
+    en.draw(ctx);
+  }
   ctx.fillStyle = "yellow";
-  ctx.fillText(getLocalTiles(player), 10,10);
+  // ctx.fillText("hello world", 10,10);
+  if (lockpickWindow.active) lockpickWindow.draw(ctx);
 }
 
 function gameUpdate() {
-  player.update()
+  player.update();
+  for (let en of enemies) {
+    en.update();
+  }
+  if (lockpickWindow.active) lockpickWindow.update();
+
 }
 
 function tick() {
