@@ -11,7 +11,7 @@ var lockpickWindow;
 
 function gameInit() {
   // setMapData("map3");
-  lockpickWindow = new LockpickWindow(6, ()=>player.inventory = 20); // remove me
+  lockpickWindow = new LockpickWindow(6, () => player.inventory = 20); // remove me
   lockpickWindow.active = false // remove me
   makeEnemies(3)
 }
@@ -27,8 +27,10 @@ function gameDraw() {
     en.draw(ctx);
   }
   ctx.fillStyle = "yellow";
-  // ctx.fillText("hello world", 10,10);
+  // ctx.fillText(player.theta, 100,10);
   if (lockpickWindow.active) lockpickWindow.draw(ctx);
+
+  drawHUD(ctx);
 }
 
 function gameUpdate() {

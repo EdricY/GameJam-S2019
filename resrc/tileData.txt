@@ -21,6 +21,9 @@ Tile Keys
  - wall-brown.png = 73,29,0,255
  - plant.png = 0,255,33,255
  - couch.png = 0,62,143,255
+ - stall.png = 255,140,220,255
+ - Safe Closed-1.png.png = 10,0,0,255
+ - Register Closed-1.png.png = 20,0,0,255
 
 Places to steal from:
 - Mall

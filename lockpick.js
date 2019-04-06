@@ -31,11 +31,15 @@ function LockpickWindow(numPins, callback) {
 
 
   this.update = function () {
+    if (keys[27]) { //escape
+      this.active = false;
+      return;
+    }
     for (let i = 0; i < numPins; i++) {
       this.chambers[i].update();
     }
 
-    if (lockPickProgress >= numPins) {
+    if (lockPickProgress >= numPins) { //success!
       if (this.holdTimer > 0) this.holdTimer--;
       else {
         this.active = false;

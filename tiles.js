@@ -19,10 +19,17 @@ const TILES = {
   '255,106,0,255' : 12,
   '107,42,0,255' : 13,
   '107,42,10,255' : 14,
-  '107,42,20,255' : 15
+  '107,42,20,255' : 15,
+  '73,29,0,255' : 16,
+  '0,255,33,255' : 17,
+  '0,62,143,255' : 18,
+  '255,140,220,255' : 19,
+  '10,0,0,255' : 20, //safe
+  '20,0,0,255' : 21, //register
 };
 
 const FLOORTILES = [1, 7, 12];
+const LOCKEDTILES = [20, 21]
 
 const tileImgIDs = [
   "tile0",
@@ -40,7 +47,13 @@ const tileImgIDs = [
   "carpet",
   "teller",
   "teller-left",
-  "teller-down"
+  "teller-down",
+  "wall-brown",
+  "plant",
+  "couch",
+  "stall",
+  "safe-closed",
+  "register-closed",
 ]
 
 /////////////////////////////
