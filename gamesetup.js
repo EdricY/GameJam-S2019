@@ -17,7 +17,7 @@ const MAPIDS = [
   "map5",
   "map6",
   "map7",
-  "map7",
+  "map8",
   "map7",
 ]
 

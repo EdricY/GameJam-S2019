@@ -4,6 +4,7 @@ Tile Size = 16x16 pixels
 
 Tile Keys
  - metal.png = 64,64,64,255
+  - Metal Door-1.png.png = 64,74,64,255
  - wood.png = 127,106,0,255
  - wooda.png = 127,106,10,255
  - woodb.png = 127,106,20,255
@@ -28,9 +29,6 @@ Tile Keys
  - container-blue = 0,21,145,255
 
 Places to steal from:
-- Freighter
-	- Various color metal - red/blue accents
-	- Water
 - Mansion
 	- Marble - white/gold
 	- Carpet - dark red
@@ -45,6 +43,8 @@ Places to steal from:
 	- Cages
 
 
+- Freighter
+	- Various color metal - red/blue accents
 - Mall
 	- Tile, solid color
 	- Plants
