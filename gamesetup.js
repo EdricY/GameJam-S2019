@@ -15,10 +15,10 @@ const MAPIDS = [
   "map3",
   "map4",
   "map5",
-  "map5",
-  "map5",
-  "map5",
-  "map5",
+  "map6",
+  "map6",
+  "map6",
+  "map6",
 ]
 
 //returns x where min <= x < max
