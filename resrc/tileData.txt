@@ -14,6 +14,10 @@ Tile Keys
  - tile-white.png = 181,181,181,255
  - counter.png = 255,0,0,255
  - glass-display.png = 0,255,255,255
+ - carpet.png = 255,106,0,255
+ - teller.png = 107,42,0,255
+ - teller-left.png = 107,42,10,255
+ - teller-down.png = 107,42,20,255
 
 Places to steal from:
 - Bank
@@ -40,6 +44,8 @@ Places to steal from:
 - Plane
 	- Cargo - dark green/brown, tarps
 	- Cages
+
+
 - Store
 	- Tile - white marks
 	- Shelving
