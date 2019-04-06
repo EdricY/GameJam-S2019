@@ -1,16 +1,19 @@
 //depends on input.js
+//depends on tiles.js
 
 const PLAYERSIZE = 16;
 const PLAYERHALFSIZE = PLAYERSIZE / 2;
+const PHSZ = PLAYERHALFSIZE;
 const SQRT2 = Math.sqrt(2);
+
 function Player() {
   this.x = 100;
   this.y = 100;
   this.vx = 0;
   this.vy = 0;
-  this.speed = 4;
+  this.speed = 5;
   this.color = "red";
-  this.draw = () => drawPlayer(ctx, this);
+  this.draw = (ctx) => drawPlayer(ctx, this);
   this.update = function () {
     if (keys[37]) { //left
       this.vx = -this.speed;
@@ -42,10 +45,10 @@ function drawPlayer(ctx, player) {
   ctx.fillRect(left, top, PLAYERSIZE, PLAYERSIZE);
 }
 
-function getLocalTiles(playerPos) {
-  tl = getTileFromPos(playerPos.x - PLAYERHALFSIZE, playerPos.y - PLAYERHALFSIZE);
-  tr = getTileFromPos(playerPos.x + PLAYERHALFSIZE, playerPos.y - PLAYERHALFSIZE);
-  bl = getTileFromPos(playerPos.x - PLAYERHALFSIZE, playerPos.y + PLAYERHALFSIZE);
-  br = getTileFromPos(playerPos.x + PLAYERHALFSIZE, playerPos.y + PLAYERHALFSIZE);
+function getLocalTiles(player) {
+  tl = getTileFromPos(mapData, player.x - PHSZ  , player.y - PHSZ  );
+  tr = getTileFromPos(mapData, player.x + PHSZ-1, player.y - PHSZ  );
+  bl = getTileFromPos(mapData, player.x - PHSZ  , player.y + PHSZ-1);
+  br = getTileFromPos(mapData, player.x + PHSZ-1, player.y + PHSZ-1);
   return [tl, tr, bl, br];
 }

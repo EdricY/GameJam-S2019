@@ -1,15 +1,25 @@
 
-var mapLoader = document.getElementById('mapLoader')
-var ml_ctx = mapLoader.getContext('2d')
+var mapLoader = document.getElementById('mapLoader');
+var ml_ctx = mapLoader.getContext('2d');
+
+var mapCanvas = document.getElementById('mapCanvas');
+var mapctx = mapCanvas.getContext('2d');
+mapctx.fillStyle = "red";
+mapctx.fillRect(0, 0, 500, 500)
+
 
 const TILESIZE = 16;
+const MAPW = 48;
+const MAPH = 32;
 
 const TILES = {
-  '255,255,255,255' : null,
-  '0,0,0,255' : 0,
-  '64, 64, 64, 255' : 1,
-  '127, 106, 0, 255' : 2
+  '255,255,255,255': null,
+  '0,0,0,255': 0,
+  '64,64,64,255': 1,
+  '127,106,0,255': 2
 };
+
+const FLOORTILES = [1];
 
 const tileImgIDs = [
   "tile0",
@@ -21,14 +31,18 @@ for (let imgID of tileImgIDs) {
   tileImgs.push(document.getElementById(imgID))
 }
 
-
+function setMapData(imgID) {
+  mapData = getMapData(imgID);
+  mapctx.clearRect(0, 0, mapCanvas.width, mapCanvas.height);
+  drawMap(mapctx, mapData, true)
+}
 
 function getMapData(imgID) {
   let img = document.getElementById(imgID)
   let data = [];
   ml_ctx.drawImage(img, 0, 0);
-  let w = 48;
-  let h = 32;
+  let w = MAPW;
+  let h = MAPH;
   let raw_data = ml_ctx.getImageData(0, 0, w, h);
   raw_data = raw_data.data
   for (let row = 0; row < h; row++) {
@@ -43,16 +57,18 @@ function getMapData(imgID) {
   return data;
 }
 
-function drawMap(ctx, mapData) {
+function drawMap(ctx, mapData, removeFloor=false) {
   let rl = mapData.length;
   let cl = mapData[0].length;
-  let TILESIZE = 16;
   for (let row = 0; row < rl; row++) {
     for (let col = 0; col < cl; col++) {
       let tileID = mapData[row][col];
       if (tileID == null) continue;
       let tileImg = getTileImg(tileID);
-      ctx.drawImage(tileImg, col * tilesize, row * tilesize);
+      if (removeFloor && FLOORTILES.includes(tileID)) {
+        continue;
+      }
+      ctx.drawImage(tileImg, col * TILESIZE, row * TILESIZE);
     }
   }
 }
@@ -62,5 +78,9 @@ function getTileImg(tileID) {
 }
 
 function getTileFromPos(mapData, x, y) {
-  return mapData[Math.floor(y/TILESIZE)][[Math.floor(x/TILESIZE)]]
+  let r = Math.floor(y / TILESIZE);
+  let c = Math.floor(x / TILESIZE);
+  if (r < 0 || c < 0) return null;
+  if (r > MAPH || c > MAPW) return null;
+  return mapData[r][c]
 }

@@ -8,17 +8,17 @@ var redraw = false;
 var player = new Player();
 
 function gameInit() {
-  mapData = getMapData("map0");
+  setMapData("map1");
 }
 
 gameInit();
 
 function gameDraw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawMap(ctx, mapData)
-  player.draw();
-  ctx.fillStyle = "yellow"
-  // ctx.fillText(player.vx, 10,10)
+  drawMap(ctx, mapData);
+  player.draw(ctx);
+  ctx.fillStyle = "yellow";
+  ctx.fillText(getLocalTiles(player), 10,10);
 }
 
 function gameUpdate() {
