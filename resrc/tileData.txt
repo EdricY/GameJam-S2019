@@ -13,6 +13,7 @@ Tile Keys
  - shelf-h.png = 127,51,2,255
  - tile-white.png = 181,181,181,255
  - counter.png = 255,0,0,255
+ - glass-display.png = 0,255,255,255
 
 Places to steal from:
 - Bank
@@ -36,9 +37,6 @@ Places to steal from:
 - Casino
 	- Carpet - dark red patterns???
 	- Slot machines/roulette table
-- Museum
-	- Glass displays
-	- Big dino
 - Plane
 	- Cargo - dark green/brown, tarps
 	- Cages
@@ -51,3 +49,6 @@ Places to steal from:
 	- Wood
 	- Metal
 	- Safe
+- Museum
+	- Glass displays
+	- Tile - white
