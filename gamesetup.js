@@ -18,7 +18,7 @@ const MAPIDS = [
   "map6",
   "map7",
   "map8",
-  "map7",
+  "map9",
 ]
 
 //returns x where min <= x < max
