@@ -37,6 +37,17 @@ function setMapData(imgID) {
   mapData = getMapData(imgID);
   mapctx.clearRect(0, 0, mapCanvas.width, mapCanvas.height);
   drawMap(mapctx, mapData, true)
+  let raw_collision_data = mapctx.getImageData(0, 0, W, H);
+  raw_collision_data = raw_collision_data.data;
+  collisionMap = [];
+  for (let y = 0; y < H; y++) {
+    collisionMap.push([])
+    for (let x = 0; x < W; x++) {
+      let pos = 4 * (x + y * W) + 3;
+      collisionMap[y].push(raw_collision_data[pos] > 0)
+    }
+  }
+
 }
 
 function getMapData(imgID) {
