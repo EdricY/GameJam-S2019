@@ -3,8 +3,9 @@ Map Size = 48x32 tiles
 Tile Size = 16x16 pixels
 
 Tile Keys
- - metal.png = (64, 64, 64, 255)
- - wood.png = (127, 106, 0, 255)
+ - metal.png = 64,64,64,255
+ - wood.png = 127,106,0,255
+ - Wood Door-1.png.png = 127,51,0,255
 
 Places to steal from:
 - Bank
@@ -23,8 +24,9 @@ Places to steal from:
 	- Marble - white/gold
 	- Carpet - dark red
 - Store
-	- Tile
+	- Tile - wahite marks
 	- Shelving
+	-  
 - Mall
 	- Tile, solid color
 	- Plants
