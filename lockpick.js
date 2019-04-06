@@ -52,6 +52,7 @@ function LockpickWindow(numPins, callback) {
 
     let next = this.pattern[lockPickProgress];
     if (holdMode) {
+      play_lock_picking_noise();
       let required = this.pattern.slice(0, lockPickProgress)
       for (let i = 1; i <= 6; i++) {
         let keycode = customKeycodes[i-1];
@@ -71,6 +72,7 @@ function LockpickWindow(numPins, callback) {
         }
       }
     } else {
+      play_lock_picking_noise();
       for (let i = 1; i <= 6; i++) {
         let keycode = customKeycodes[i-1];
         if (keys[keycode] && !lastKeys[keycode]) {

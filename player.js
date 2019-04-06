@@ -36,10 +36,13 @@ function Player(x, y) {
   this.y = y;
   this.vx = 0;
   this.vy = 0;
-  this.stamina = 120;
+  this.maxStamina = 120;
+  this.stamina = this.maxStamina;
   this.speed = 4;
   this.basespeed = 4;
   this.speedy = false;
+  this.stealthy = false;
+  this.stealthTimer = 0;
   this.animationFrame = 0;
   this.inventory = 0;
   this.theta = 0;
@@ -48,13 +51,33 @@ function Player(x, y) {
   this.draw = (ctx) => drawPlayer(ctx, this);
   this.update = function () {
     if (lockpickWindow.active) return;
-    if (keys[90]) { //Z
+    if (keys[90] && this.stamina > 0) { //Z
       this.speedy = true;
       this.speed = this.basespeed * 1.5;
+      this.stamina--;
     } else {
       this.speedy = false;
       this.speed = this.basespeed;
     }
+
+    if (keys[88] && this.stamina > 0) { //X
+      this.stealthy = true;
+      this.stealthTimer ++;
+      this.stamina--;
+      this.animationFrame = 0;
+      return;
+    } else {
+      this.stealthy = false;
+      this.stealthTimer = 0;
+    }
+
+    if (!this.speedy) {
+      this.stamina += .2;
+      if (this.stamina > this.maxStamina) {
+        this.stamina = this.maxStamina;
+      }
+    }
+
     if (keys[UP]) {
       this.vy = -this.speed;
     } else if (keys[DOWN]) {
@@ -160,7 +183,6 @@ function drawPlayer(ctx, player) {
     playerctx.clearRect(0, 0, W, H)
     playerctx.drawImage(tempCanvas, 0, 0)
     playerctx.globalAlpha = 1;
-
   } else {
     tempctx.clearRect(0, 0, W, H)
     playerctx.clearRect(0, 0, W, H)
@@ -169,7 +191,17 @@ function drawPlayer(ctx, player) {
   playerctx.rotate(rotation);
   playerctx.drawImage(img, -PLAYERSIZE, -PLAYERSIZE);
   playerctx.resetTransform();
+
+  if (player.stealthy) {
+    playerctx.globalAlpha = Math.min(player.stealthTimer / 50, .6);
+    playerctx.globalCompositeOperation = 'source-atop';
+    playerctx.drawImage(floorCanvas, 0, 0);
+    playerctx.drawImage(collisionCanvas, 0, 0);
+    playerctx.globalAlpha = 1;
+    playerctx.globalCompositeOperation = 'source-over';
+  }
   ctx.drawImage(playerCanvas, 0, 0)
+
 
   ctx.fillStyle = "black"
   ctx.font = "14px serif"

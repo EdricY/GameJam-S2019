@@ -6,7 +6,10 @@ const VISRADIUS = 120;
 const VISRSQ = VISRADIUS*VISRADIUS;
 const BOUNCE = PHSZ + 10
 
-var alarm = false;
+var bulletSpread = .2;
+
+var alarmTime = 1000
+var alarm = 0;
 
 const ENEMYIMGS = [
   document.getElementById("enemy_0"),
@@ -22,14 +25,19 @@ function Enemy(x, y) {
   this.timer = randInt(5, 35);
   this.theta = Math.random() * TAU - PI;
   this.thetaGoal = this.theta;
-  this.basespeed = 0;
+  this.basespeed = 3;
   this.animationFrame = 0;
   this.speed = this.basespeed;
+  this.shootTimer = 0;
+  this.reloadTime = 30;
   this.rotateDirection = getRotationDirection();
   this.pfBullets = [];
   this.losBullets = [];
+  this.bullets = [];
   this.update = function () {
-    this.speed = this.basespeed
+    this.shootTimer--;
+    if (this.shootTimer < 0) this.shootTimer = 0;
+    this.speed = this.basespeed;
     if (alarm) this.speed += this.basespeed;
     let len = this.pfBullets.length;
     for (let i = 0; i < len; i++) {
@@ -51,14 +59,36 @@ function Enemy(x, y) {
       };
     }
 
+    len = this.bullets.length;
+    for (let i = 0; i < len; i++) {
+      let b = this.bullets[i];
+      if (b.update) b.update();
+      else {
+        this.bullets.splice(i--, 1);
+        len--;
+      };
+    }
+
+
     if (this.withinVisibility(player)) {
       this.shootLOSBullets();
     }
     let dx = player.x - this.x;
     let dy = player.y - this.y;
     let distSq = dx*dx + dy*dy;
-    if (distSq < 32*32) {
-      alarm = true;
+    if (distSq < 32*32) { //bump!
+      alarm = alarmTime;
+      let dx = player.x - this.x
+      let dy = player.y - this.y
+      let theta = Math.atan2(dy,dx);
+      let bx = this.x;
+      let by = this.y;
+      this.action = 2
+      this.thetaGoal = theta;
+      if (this.shootTimer <= 0) {
+        this.bullets.push(new Bullet(bx, by, theta))
+        this.shootTimer = this.reloadTime;
+      }
     }
 
 
@@ -91,6 +121,16 @@ function Enemy(x, y) {
       this.animationFrame = 0;
     } else if (this.action == 2) {
       let diff = this.thetaGoal - this.theta;
+      // find an okay diff
+      if (Math.abs(diff) > PI) {
+        this.theta += TAU;
+        diff = this.thetaGoal - this.theta;
+      }
+      if (Math.abs(diff) > PI) {
+        this.theta -= 2*TAU;
+        diff = this.thetaGoal - this.theta;
+      }
+
       let turnspeed = this.speed/40;
       if (Math.abs(diff) > turnspeed) {
         this.theta += turnspeed*Math.sign(diff);
@@ -119,13 +159,18 @@ function Enemy(x, y) {
     this.drawVisibility(ctx);
     ctx.resetTransform();
 
+    for (let b of this.bullets) {
+      b.draw(ctx);
+    }
+
+
     // for (let b of this.pfBullets) { //debug only
     //   b.draw(ctx);
     // }
 
-    for (let b of this.losBullets) { //debug only
-      b.draw(ctx);
-    }
+    // for (let b of this.losBullets) { //debug only
+    //   b.draw(ctx);
+    // }
 
 
   }
@@ -161,13 +206,26 @@ function Enemy(x, y) {
 
   this.losNotify = function() {
     if (this.withinVisibility(player)) {
-      alarm = true;
+      alarm = alarmTime;
+      let dx = player.x - this.x
+      let dy = player.y - this.y
+      let theta = Math.atan2(dy,dx);
+      let bx = this.x;
+      let by = this.y;
+      if (this.shootTimer <= 0) {
+        this.bullets.push(new Bullet(bx, by, theta))
+        this.shootTimer = this.reloadTime;
+      }
+
+      this.action = 2
+      this.thetaGoal = theta;
+
     }
   }
 
   this.drawVisibility = function(ctx) {
     ctx.fillStyle = "yellow";
-    if (this.withinVisibility(player)) ctx.fillStyle = "red"; //debug
+    // if (this.withinVisibility(player)) ctx.fillStyle = "red"; //debug
 
     ctx.globalAlpha = 0.3;
     ctx.beginPath();
@@ -274,6 +332,35 @@ function PFBullet(x, y, theta, owner) {
     ctx.fill();
   }
 }
+
+function Bullet(x, y, t) {
+  this.x = x;
+  this.y = y;
+  this.x += 7 * Math.cos(t);
+  this.y += 7 * Math.sin(t);
+  this.x += 10 * Math.cos(t - PI/2)
+  this.y += 10 * Math.sin(t - PI/2)
+  this.theta = t - Math.random() * bulletSpread + Math.random() * bulletSpread;
+
+  this.bulletSpeed = 10;
+  this.update = function() {
+    let vx = this.bulletSpeed * Math.cos(this.theta);
+    let vy = this.bulletSpeed * Math.sin(this.theta);
+    this.x += vx;
+    this.y += vy;
+    let tile = getTileFromPos(mapData, this.x, this.y);
+    if (FLOORTILES.includes(tile)) return;
+    this.update = null;
+  }
+
+  this.draw = function(ctx) {
+    ctx.fillStyle = "red";
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, 3, 0, TAU);
+    ctx.fill();
+  }
+}
+
 
 
 /**

@@ -63,7 +63,7 @@ function Bullet(x, y, t) {
     this.x += vx;
     this.y += vy;
     if(this.y < 0 || this.y > 511) this.update = null;
-    if(this.x < - || this.x > 767) this.update = null;
+    if(this.x < 0 || this.x > 767) this.update = null;
   }
 }
 

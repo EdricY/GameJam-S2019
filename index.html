@@ -50,6 +50,35 @@
 <canvas id="floorCanvas" hidden width="768" height="512"></canvas>
 <canvas id="playerCanvas" hidden width="768" height="512"></canvas>
 <canvas id="tempCanvas" hidden width="768" height="512"></canvas>
+
+<script type="text/javascript">
+const INJURIES = [];
+const LOCK_PICKING = [];
+var SAFE_OPENING = new Audio("resrc/safe_opening.wav");
+const ALARM = new Audio("resrc/alarm_sound.wav");
+const BACKGROUND = new Audio("resrc/Lee_Rosevere_-_12_-_Dont_Trust_the_Cloud.wav");
+
+INJURIES.push(new Audio("resrc/injury_0.wav"));
+INJURIES.push(new Audio("resrc/injury_1.wav"));
+INJURIES.push(new Audio("resrc/injury_2.wav"));
+LOCK_PICKING.push(new Audio("resrc/lock_picking_0.wav"));
+LOCK_PICKING.push(new Audio("resrc/lock_picking_1.wav"));
+LOCK_PICKING.push(new Audio("resrc/lock_picking_2.wav"));
+LOCK_PICKING.push(new Audio("resrc/lock_picking_3.wav"));
+
+function play_lock_picking_noise() {
+  let song = randInt(0, 4);
+  LOCK_PICKING[song].play();
+  LOCK_PICKING[song].pause();
+}
+
+function play_injury_noise() {
+  let song = randInt(0, 3);
+  INJURIES[song].play();
+  INJURIES[song].pause();
+}
+
+</script>
 <img hidden id='map0' src='resrc/map0.png' alt='img'>
 <img hidden id='map1' src='resrc/map1.png' alt='img'>
 <img hidden id='map2' src='resrc/map2.png' alt='img'>
@@ -109,6 +138,7 @@
 <script src="input.js" defer></script>
 <script src="tiles.js" defer></script>
 <script src="state.js" defer></script>
+<!-- <script src="audio.js" defer></script> -->
 <script src="lockpick.js" defer></script>
 <script src="player.js" defer></script>
 <script src="lockbox.js" defer></script>

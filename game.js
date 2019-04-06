@@ -39,6 +39,10 @@ function gameUpdate() {
     enemies[i].update();
   }
 
+  if (alarm > 0) alarm --;
+  else alarm = 0;
+  
+
   // len = interactionObjects.length;
   // for (let i = 0; i < len; i++) {
   //   interactionObjects[i].update();
