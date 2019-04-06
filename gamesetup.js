@@ -1,11 +1,14 @@
 const canvas = document.getElementById('canvas');
 const W = canvas.width;
-const H = canvas.height;
+const H = 512;//canvas.height;
 const ctx = canvas.getContext('2d');
 ctx.textAlign = "center";
 ctx.textBaseLine = "middle";
+
+var mapID = -1;
 var mapData = [];
 var collisionMap = [];
+var interactionObjects = [];
 var gameState = {};
 
 const MAPIDS = [
@@ -36,4 +39,8 @@ function shuffle(a) {
     a[j] = x;
   }
   return a;
+}
+
+function mod(a, n) {
+ return (a % n + n) % n;
 }

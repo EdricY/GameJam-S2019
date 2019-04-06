@@ -5,15 +5,14 @@ var lastTime = Date.now();
 var lag = 0;
 var redraw = false;
 
-var player = new Player();
+var player = new Player(0, 0);
 var lockpickWindow;
-
 
 function gameInit() {
   // setMapData("map3");
   lockpickWindow = new LockpickWindow(6, () => player.inventory = 20); // remove me
   lockpickWindow.active = false // remove me
-  makeEnemies(3)
+  makeEnemies(1)
 }
 
 // gameInit();
@@ -35,9 +34,16 @@ function gameDraw() {
 
 function gameUpdate() {
   player.update();
-  for (let en of enemies) {
-    en.update();
+  let len = enemies.length;
+  for (let i = 0; i < len; i++) {
+    enemies[i].update();
   }
+
+  // len = interactionObjects.length;
+  // for (let i = 0; i < len; i++) {
+  //   interactionObjects[i].update();
+  // }
+
   if (lockpickWindow.active) lockpickWindow.update();
   lastKeys = JSON.parse(JSON.stringify(keys)); //deep copy
 }

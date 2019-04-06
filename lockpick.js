@@ -33,6 +33,7 @@ function LockpickWindow(numPins, callback) {
   this.update = function () {
     if (keys[27]) { //escape
       this.active = false;
+      lockPickProgress = 0;
       return;
     }
     for (let i = 0; i < numPins; i++) {
@@ -43,6 +44,7 @@ function LockpickWindow(numPins, callback) {
       if (this.holdTimer > 0) this.holdTimer--;
       else {
         this.active = false;
+        lockPickProgress = 0;
         if (this.callback) this.callback();
       }
       return

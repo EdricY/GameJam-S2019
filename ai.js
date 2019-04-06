@@ -2,26 +2,46 @@ const enemies = [];
 const PI = Math.PI;
 const TAU = 2 * PI;
 const VISHALFWIDTH = TAU / 12;
-const VISRADIUS = 100;
+const VISRADIUS = 120;
+const VISRSQ = VISRADIUS*VISRADIUS;
 const BOUNCE = PHSZ + 10
 
 var alarm = false;
 
-function Enemy() {
-  this.x = 300;
-  this.y = 300;
+const ENEMYIMGS = [
+  document.getElementById("enemy_0"),
+  document.getElementById("enemy_1"),
+  document.getElementById("enemy_2"),
+  document.getElementById("enemy_3")
+]
+
+function Enemy(x, y) {
+  this.x = x;
+  this.y = y;
   this.action = 0; // 0:starts walking; 1:seeking; 2:turning
   this.timer = randInt(5, 35);
   this.theta = Math.random() * TAU - PI;
   this.thetaGoal = this.theta;
   this.basespeed = 3;
+  this.animationFrame = 0;
   this.speed = this.basespeed;
   this.rotateDirection = getRotationDirection();
+  this.pfBullets = [];
   this.losBullets = [];
   this.update = function () {
     this.speed = this.basespeed
     if (alarm) this.speed += this.basespeed;
-    let len = this.losBullets.length;
+    let len = this.pfBullets.length;
+    for (let i = 0; i < len; i++) {
+      let b = this.pfBullets[i];
+      if (b.update) b.update();
+      else {
+        this.pfBullets.splice(i--, 1);
+        len--;
+      };
+    }
+
+    len = this.losBullets.length;
     for (let i = 0; i < len; i++) {
       let b = this.losBullets[i];
       if (b.update) b.update();
@@ -30,6 +50,11 @@ function Enemy() {
         len--;
       };
     }
+
+    if (this.withinVisibility(player)) {
+      this.shootLOSBullets();
+    }
+
 
     if (this.action == 0) { //moving
       let collided = checkCollision(this);
@@ -45,12 +70,19 @@ function Enemy() {
           this.timer = 30;
         }
       }
+
+      this.animationFrame += .2;
+      if (this.animationFrame >= 4){
+        this.animationFrame = 0;
+      }
+
     } else if (this.action == 1) {
-      if (this.timer == 30) this.shootLOSBullets();
-      if (this.losBullets.length <= 0 || this.timer <= 0) {
+      if (this.timer == 30) this.shootPFBullets();
+      if (this.pfBullets.length <= 0 || this.timer <= 0) {
         this.action = 2;
       }
       this.timer--;
+      this.animationFrame = 0;
     } else if (this.action == 2) {
       let diff = this.thetaGoal - this.theta;
       let turnspeed = this.speed/40;
@@ -60,40 +92,159 @@ function Enemy() {
         this.theta = this.thetaGoal;
         this.action = 0;
       }
+      this.animationFrame = 0;
     }
   }
   this.draw = function(ctx) {
-    ctx.fillStyle = "blue";
-    ctx.fillRect(this.x - PHSZ, this.y - PHSZ, 16, 16);
-    drawVisibility(ctx, this);
+    // ctx.fillStyle = "blue";
+    // ctx.fillRect(this.x - PHSZ, this.y - PHSZ, 16, 16);
 
-    // for (let b of this.losBullets) { //debug only
+    let f_x = Math.round(this.x)
+    let f_y = Math.round(this.y)
+    let left = f_x - PLAYERSIZE; //awkward
+    let top = f_y - PLAYERSIZE;
+    let frame = Math.floor(this.animationFrame);
+    let img = ENEMYIMGS[frame];
+    let rotation = this.theta + PI/2;
+
+    ctx.translate(f_x, f_y);
+    ctx.rotate(rotation);
+    ctx.drawImage(img, -PLAYERSIZE, -PLAYERSIZE);
+    this.drawVisibility(ctx);
+    ctx.resetTransform();
+
+    // for (let b of this.pfBullets) { //debug only
     //   b.draw(ctx);
     // }
+
+    for (let b of this.losBullets) { //debug only
+      b.draw(ctx);
+    }
+
+
   }
 
-  this.shootLOSBullets = function() {
+  this.shootPFBullets = function() {
     let numBullets = randInt(0, 13);
     let start = (Math.random() * TAU) - PI;
     for (let i = 0; i < numBullets; i ++) {
-      this.losBullets.push(
-        new LOSBullet(this.x, this.y, start + i*TAU/numBullets, this)
+      this.pfBullets.push(
+        new PFBullet(this.x, this.y, start + i*TAU/numBullets, this)
       );
     }
   }
 
-  this.losNotify = function(theta, dist) {
+  this.shootLOSBullets = function() {
+    let pt = {x:player.x, y:player.y}
+    this.losBullets.push(new LOSBullet(this.x, this.y, pt, this));
+    pt.x+=1
+    this.losBullets.push(new LOSBullet(this.x, this.y, pt, this));
+    pt.x-=1
+    this.losBullets.push(new LOSBullet(this.x, this.y, pt, this));
+    pt.x+=1
+    pt.y+=1
+    this.losBullets.push(new LOSBullet(this.x, this.y, pt, this));
+    pt.y-=1
+    this.losBullets.push(new LOSBullet(this.x, this.y, pt, this));
+
+  }
+
+  this.pfNotify = function(theta, dist) {
     if (dist > 8) {
       this.thetaGoal = theta;
     }
   }
+
+  this.losNotify = function() {
+    alarm = true;
+  }
+
+  this.drawVisibility = function(ctx) {
+    ctx.fillStyle = "yellow";
+    if (this.withinVisibility(player)) ctx.fillStyle = "red"; //debug
+
+    ctx.globalAlpha = 0.3;
+    ctx.beginPath();
+    ctx.moveTo(-7,-10);
+    ctx.arc(-7, -10, VISRADIUS,-VISHALFWIDTH-PI/2,VISHALFWIDTH-PI/2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.globalAlpha = 1.0;
+  }
+
+  this.withinVisibility = function(pt) {
+    let lightx = this.x + 7 * Math.cos(this.theta);
+    let lighty = this.y + 7 * Math.cos(this.theta);
+    lightx += 10*Math.cos(this.theta - PI/2)
+    lighty += 10*Math.sin(this.theta - PI/2)
+    let dx = pt.x - lightx;
+    let dy = pt.y - lighty;
+    let distSq = dx*dx + dy*dy;
+    // if (distSq > VISRSQ) {
+    if (distSq > VISRSQ + 48*48) {
+      return false;
+    }
+
+    theta = Math.atan2(dy,dx);
+    anglediff = mod(this.theta - theta + Math.PI + TAU, TAU) - Math.PI
+    anglediff = (anglediff % TAU)
+    // if (Math.abs(anglediff) > VISHALFWIDTH + TAU/24) return false;
+    if (Math.abs(anglediff) > VISHALFWIDTH) return false;
+
+    return true;
+
+  }
 }
+
+function LOSBullet(x, y, pt, owner) {
+  this.x = x;
+  this.y = y;
+  let dx = pt.x - x;
+  let dy = pt.y - y;
+  let hyp = dx*dx + dy*dy;
+  this.vx = dx / hyp;
+  this.vy = dy / hyp;
+  this.speed = 12;
+  this.owner = owner;
+  this.dist = 0;
+  this.update = function() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.dist += this.speed;
+    if (this.intersectsPlayer()) {
+      this.owner.losNotify();
+    }
+    if (this.dist > VISRADIUS) {
+      this.update = null;
+      return;
+    }
+    let tile = getTileFromPos(mapData, this.x, this.y);
+    if (FLOORTILES.includes(tile)) return;
+    this.update = null;
+  }
+
+  this.intersectsPlayer = function() {
+    let dx = player.x - this.x;
+    let dy = player.y - this.y;
+    let distSq = dx*dx + dy*dy;
+    return distSq < PLAYERSIZE*PLAYERSIZE;
+  }
+
+  this.draw = function(ctx) {//debug only
+    ctx.fillStyle = "lime";
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, 3, 0, TAU);
+    ctx.fill();
+  }
+}
+
 
 
 /**
  * Get best direction to go in
  */
-function LOSBullet(x, y, theta, owner) {
+function PFBullet(x, y, theta, owner) {
   this.x = x;
   this.y = y;
   this.theta = theta;
@@ -108,7 +259,7 @@ function LOSBullet(x, y, theta, owner) {
     this.dist += this.speed;
     let tile = getTileFromPos(mapData, this.x, this.y);
     if (FLOORTILES.includes(tile)) return;
-    this.owner.losNotify(this.theta, this.dist);
+    this.owner.pfNotify(this.theta, this.dist);
     this.update = null;
   }
 
@@ -135,7 +286,8 @@ function resetAI(person) {
  */
 function makeEnemies(num) {
   for (let i = 0; i < num; i++) {
-    enemies.push(new Enemy());
+    let pos = ENEMY_SPAWN_LOCATIONS[mapID][randInt(0, 4)]
+    enemies.push(new Enemy(pos.x, pos.y));
   }
 }
 
@@ -170,22 +322,6 @@ function updateAI() {
   for (let i = 0; i < enemies.length; i++) {
     enemies[i].update();
   }
-}
-
-
-/**
- * Render enemy visibility
- */
-function drawVisibility(ctx, sector) {
-  ctx.fillStyle = "yellow";
-  ctx.globalAlpha = 0.3;
-  ctx.beginPath();
-  ctx.moveTo(sector.x, sector.y);
-  ctx.arc(sector.x, sector.y, VISRADIUS, sector.theta - VISHALFWIDTH, sector.theta + VISHALFWIDTH);
-  ctx.lineTo(sector.x, sector.y);
-  ctx.fill();
-  ctx.stroke();
-  ctx.globalAlpha = 1.0;
 }
 
 
