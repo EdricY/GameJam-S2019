@@ -1,14 +1,17 @@
-lockchamber = document.getElementById("lockchamber")
-lockpin = document.getElementById("lockpin")
-
-var holdMode = false;
+const lockchamber = document.getElementById("lockchamber")
+const lockpin = document.getElementById("lockpin")
+const holdCheckbox = document.getElementById("holdCheckbox")
 const PINW = 64;
-lockPickProgress = 0;
-function LockpickWindow(numPins) {
+var lockPickProgress = 0;
+var holdMode = false;
+holdCheckbox.onchange = () => holdMode = holdCheckbox.checked
+
+function LockpickWindow(numPins, callback) {
   this.chambers = [];
   this.pattern = getRandomPattern(numPins);
   this.active = true;
   this.holdTimer = 30;
+  this.callback = callback;
   let fullwidth = PINW * numPins;
   let firstx = W / 2 - fullwidth / 2;
   for (let i = 0; i < numPins; i++) {
@@ -34,7 +37,10 @@ function LockpickWindow(numPins) {
 
     if (lockPickProgress >= numPins) {
       if (this.holdTimer > 0) this.holdTimer--;
-      else this.active = false;
+      else {
+        this.active = false;
+        if (this.callback) this.callback();
+      }
       return
     }
 
@@ -63,7 +69,7 @@ function LockpickWindow(numPins) {
         let keycode = customKeycodes[i-1];
         if (keys[keycode] && !lastKeys[keycode]) {
           if (i == next) lockPickProgress++;
-          else { 
+          else {
             this.chambers[lockPickProgress].pulse();
             lockPickProgress = 0;
           }
@@ -101,7 +107,10 @@ function LockChamber(x, seq) {
   }
 
   this.update = function() {
-    if (lockPickProgress > this.seq) this.pinYGoal = this.y - 20;
+    if (lockPickProgress > this.seq) {
+      this.pinYGoal = this.y - 20;
+      this.pulseTimer = 0;
+    }
     else this.pinYGoal = this.pinStart;
     let diff = this.pinYGoal - this.pinY;
     if (Math.abs(diff) < 2) this.pinY = this.pinYGoal;
@@ -109,7 +118,7 @@ function LockChamber(x, seq) {
 
     this.pulseTimer = Math.max(0, this.pulseTimer-1);
   }
-  
+
   this.pulse = function () {
     this.pulseTimer = 15;
   }

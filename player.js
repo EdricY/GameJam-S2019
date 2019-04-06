@@ -6,6 +6,11 @@ const PLAYERHALFSIZE = PLAYERSIZE / 2;
 const PHSZ = PLAYERHALFSIZE;
 const SQRT2 = Math.sqrt(2);
 
+const UP = 38
+const DOWN = 40
+const LEFT = 37
+const RIGHT = 39
+
 function Player() {
   this.x = 140;
   this.y = 100;
@@ -14,22 +19,30 @@ function Player() {
   this.speed = 5;
   this.color = "red";
   this.animationFrame = 0;
+  this.inventory = 0;
+  this.facing = 0;
+  this.message = "hello world";
   this.draw = (ctx) => drawPlayer(ctx, this);
   this.update = function () {
-    if (keys[37]) { //left
-      this.vx = -this.speed;
-    } else if (keys[39]) { //right
-      this.vx = this.speed;
-    } else {
-      this.vx = 0;
-    }
-    if (keys[38]) { //up
+    if (keys[UP]) {
       this.vy = -this.speed;
-    } else if (keys[40]) { //down
+      this.facing = UP;
+    } else if (keys[DOWN]) {
       this.vy = this.speed;
+      this.facing = DOWN;
     } else {
       this.vy = 0;
     }
+    if (keys[LEFT]) {
+      this.vx = -this.speed;
+      this.facing = LEFT;
+    } else if (keys[RIGHT]) {
+      this.vx = this.speed;
+      this.facing = RIGHT;
+    } else {
+      this.vx = 0;
+    }
+
     if (this.vy != 0 && this.vx != 0) {
       this.vy /= SQRT2;
       this.vx /= SQRT2;
@@ -77,9 +90,12 @@ function Player() {
 
 function drawPlayer(ctx, player) {
   ctx.fillStyle = player.color;
-  let left = player.x - PLAYERHALFSIZE;
-  let top = player.y - PLAYERHALFSIZE;
+  if (player.inventory) ctx.fillStyle = 'green';
+  let left = player.x - PHSZ;
+  let top = player.y - PHSZ;
   ctx.fillRect(left, top, PLAYERSIZE, PLAYERSIZE);
+  ctx.fillStyle = "black"
+  ctx.fillText(player.message, player.x, player.y - PLAYERSIZE)
 }
 
 function getLocalTiles(player) {
