@@ -1,4 +1,5 @@
 const keys = {};
+var lastKeys = {};
 
 onkeydown = e => {
   let k = e.keyCode;

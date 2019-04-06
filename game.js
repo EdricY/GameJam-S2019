@@ -1,5 +1,5 @@
 
-const UPDATES_PER_SEC = 60;
+const UPDATES_PER_SEC = 80;
 const MS_PER_UPDATE = 1000 / UPDATES_PER_SEC;
 var lastTime = Date.now();
 var lag = 0;
@@ -11,8 +11,8 @@ var lockpickWindow;
 
 function gameInit() {
   setMapData("map3");
-  lockpickWindow = new LockpickWindow(4); // remove me
-  lockpickWindow.active = false // remove me
+  lockpickWindow = new LockpickWindow(6); // remove me
+  // lockpickWindow.active = false // remove me
   makeEnemies(3)
 }
 
@@ -37,7 +37,7 @@ function gameUpdate() {
     en.update();
   }
   if (lockpickWindow.active) lockpickWindow.update();
-
+  lastKeys = JSON.parse(JSON.stringify(keys)); //deep copy
 }
 
 function tick() {
