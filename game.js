@@ -1,7 +1,3 @@
-var canvas = document.getElementById('canvas');
-const W = canvas.width;
-const H = canvas.height;
-var ctx = canvas.getContext('2d')
 
 const UPDATES_PER_SEC = 30;
 const MS_PER_UPDATE = 1000 / UPDATES_PER_SEC;
@@ -9,15 +5,24 @@ var lastTime = Date.now();
 var lag = 0;
 var redraw = false;
 
+var player = new Player();
+
+function gameInit() {
+  mapData = getMapData("map0");
+}
+
+gameInit();
+
 function gameDraw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "red"
-  ctx.fillRect(100, 100, 20, 10)
-
+  drawMap(ctx, mapData)
+  player.draw();
+  ctx.fillStyle = "yellow"
+  // ctx.fillText(player.vx, 10,10)
 }
 
 function gameUpdate() {
-
+  player.update()
 }
 
 function tick() {
