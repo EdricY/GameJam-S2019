@@ -18,23 +18,22 @@ Tile Keys
  - teller.png = 107,42,0,255
  - teller-left.png = 107,42,10,255
  - teller-down.png = 107,42,20,255
+ - wall-brown.png = 73,29,0,255
+ - plant.png = 0,255,33,255
+ - couch.png = 0,62,143,255
 
 Places to steal from:
-- Bank
-	- Tile - checker
-	- Teller desks
-	- Vault
+- Mall
+	- Tile, solid color
+	- Plants
+	- Stores
+		- Shoes, clothing, games, coffee
 - Freighter
 	- Various color metal - red/blue accents
 	- Water
 - Mansion
 	- Marble - white/gold
 	- Carpet - dark red
-- Mall
-	- Tile, solid color
-	- Plants
-	- Stores
-		- Shoes, clothing, games, coffee
 - Ship
 	- Water
 	- Wood
@@ -58,3 +57,7 @@ Places to steal from:
 - Museum
 	- Glass displays
 	- Tile - white
+- Bank
+	- Tile - checker
+	- Teller desks
+	- Vault

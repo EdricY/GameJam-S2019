@@ -35,7 +35,7 @@ const TILES = {
   '107,42,20,255' : 15
 };
 
-const FLOORTILES = [1, 7];
+const FLOORTILES = [1, 7, 12];
 
 const tileImgIDs = [
   "tile0",
