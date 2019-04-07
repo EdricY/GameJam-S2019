@@ -36,6 +36,7 @@ function Player(x, y) {
   this.y = y;
   this.vx = 0;
   this.vy = 0;
+  this.health = 100;
   this.maxStamina = 120;
   this.stamina = this.maxStamina;
   this.speed = 4;
@@ -150,7 +151,7 @@ function Player(x, y) {
     if (this.inventory) return;
     this.actionTarget = closestInteractionObject(this);
     if (this.actionTarget) {
-      this.message = "Lockpick [Space]";
+      this.message = this.actionTarget.message;
       if (keys[32] && !lastKeys[32]) {
         this.message = "";
         this.actionTarget.interact();

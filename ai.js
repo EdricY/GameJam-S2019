@@ -2,9 +2,11 @@ const enemies = [];
 const PI = Math.PI;
 const TAU = 2 * PI;
 const VISHALFWIDTH = TAU / 12;
-const VISRADIUS = 120;
+var VISRADIUS = 200;
 const VISRSQ = VISRADIUS*VISRADIUS;
 const BOUNCE = PHSZ + 10
+
+const bullet = document.getElementById('bullet');
 
 var bulletSpread = .2;
 
@@ -76,7 +78,7 @@ function Enemy(x, y) {
     let dx = player.x - this.x;
     let dy = player.y - this.y;
     let distSq = dx*dx + dy*dy;
-    if (distSq < 32*32) { //bump!
+    if (distSq < 32*32 && !player.stealthy) { //bump!
       alarm = alarmTime;
       let dx = player.x - this.x
       let dy = player.y - this.y
@@ -120,16 +122,12 @@ function Enemy(x, y) {
       this.timer--;
       this.animationFrame = 0;
     } else if (this.action == 2) {
-      let diff = this.thetaGoal - this.theta;
-      // find an okay diff
-      if (Math.abs(diff) > PI) {
-        this.theta += TAU;
-        diff = this.thetaGoal - this.theta;
-      }
-      if (Math.abs(diff) > PI) {
-        this.theta -= 2*TAU;
-        diff = this.thetaGoal - this.theta;
-      }
+      let diff1 = this.thetaGoal - this.theta;
+      let diff2 = diff1 - TAU;
+      let diff3 = diff1 + TAU;
+      let diff = diff1
+      if (Math.abs(diff2) < Math.abs(diff)) diff = diff2;
+      if (Math.abs(diff3) < Math.abs(diff)) diff = diff3;
 
       let turnspeed = this.speed/40;
       if (Math.abs(diff) > turnspeed) {
@@ -205,7 +203,7 @@ function Enemy(x, y) {
   }
 
   this.losNotify = function() {
-    if (this.withinVisibility(player)) {
+    if (this.withinVisibility(player) && !player.stealthy) {
       alarm = alarmTime;
       let dx = player.x - this.x
       let dy = player.y - this.y
@@ -354,10 +352,15 @@ function Bullet(x, y, t) {
   }
 
   this.draw = function(ctx) {
-    ctx.fillStyle = "red";
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, 3, 0, TAU);
-    ctx.fill();
+    let f_x = Math.round(this.x)
+    let f_y = Math.round(this.y)
+    let rotation = this.theta + PI/2;
+
+    ctx.translate(f_x, f_y);
+    ctx.rotate(rotation);
+    ctx.drawImage(bullet, -2, -3); //3x6
+    ctx.resetTransform();
+
   }
 }
 
