@@ -275,16 +275,18 @@ function LOSBullet(x, y, theta, owner) {
     this.x += vx;
     this.y += vy;
     this.dist += this.speed;
-    if (this.intersectsPlayer()) {
-      this.owner.losNotify();
-    }
     if (this.dist > VISRADIUS) {
       this.update = null;
       return;
     }
     let tile = getTileFromPos(mapData, this.x, this.y);
-    if (FLOORTILES.includes(tile)) return;
-    this.update = null;
+    if (!FLOORTILES.includes(tile)) { //hit wall
+      this.update = null;
+      return;
+    }
+    if (this.intersectsPlayer()) {
+      this.owner.losNotify();
+    }
   }
 
   this.intersectsPlayer = function() {
