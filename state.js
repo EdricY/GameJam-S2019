@@ -6,14 +6,14 @@ const upgradesDiv = document.getElementById('upgradesDiv');
 const TILE_OFFSET = 16;
 
 const PLAYER_SPAWN_LOCATIONS = {
-  0: {x : 5 * TILE_OFFSET, y : 5 * TILE_OFFSET},
-  1: {x : 45 * TILE_OFFSET, y : 15 * TILE_OFFSET},
+  0: {x : 1 * TILE_OFFSET, y : 16 * TILE_OFFSET},
+  1: {x : 46 * TILE_OFFSET, y : 16 * TILE_OFFSET},
   2: {x : 1 * TILE_OFFSET, y : 16 * TILE_OFFSET},
   3: {x : 24 * TILE_OFFSET, y : 30 * TILE_OFFSET},
   4: {x : 24 * TILE_OFFSET, y : 30 * TILE_OFFSET},
   5: {x : 1 * TILE_OFFSET, y : 16 * TILE_OFFSET},
   6: {x : 1 * TILE_OFFSET, y : 16 * TILE_OFFSET},
-  7: {x : 1 * TILE_OFFSET, y : 29 * TILE_OFFSET},
+  7: {x : 1 * TILE_OFFSET, y : 28 * TILE_OFFSET},
   8: {x : 1 * TILE_OFFSET, y : 16 * TILE_OFFSET},
   9: {x : 24 * TILE_OFFSET, y : 30 * TILE_OFFSET},
   10: {x : 24 * TILE_OFFSET, y : 1 * TILE_OFFSET},
@@ -70,13 +70,13 @@ const ENEMY_SPAWN_LOCATIONS = {
       {x : 14 * TILE_OFFSET, y : 1 * TILE_OFFSET},
       {x : 38 * TILE_OFFSET, y : 31 * TILE_OFFSET},
       {x : 5 * TILE_OFFSET, y : 8 * TILE_OFFSET},
-      {x : 25 * TILE_OFFSET, y : 0 * TILE_OFFSET},
+      {x : 25 * TILE_OFFSET, y : 2 * TILE_OFFSET},
   ],
   8: [
       {x : 7 * TILE_OFFSET, y : 0 * TILE_OFFSET},
       {x : 7 * TILE_OFFSET, y : 31 * TILE_OFFSET},
       {x : 47 * TILE_OFFSET, y : 24 * TILE_OFFSET},
-      {x : 35 * TILE_OFFSET, y : 0 * TILE_OFFSET},
+      {x : 35 * TILE_OFFSET, y : 2 * TILE_OFFSET},
   ],
   9: [
       {x : 40 * TILE_OFFSET, y : 5 * TILE_OFFSET},
@@ -154,6 +154,8 @@ function showCredits() {
 function showUpgrades() {
   gameState.hideAll();
   upgradesDiv.classList.remove("nodisplay")
+  document.getElementById("wallet").innerHTML = walletAmt;
+  shopMessage.innerHTML = "Welcome to the shop!";
 }
 
 function showGame() {

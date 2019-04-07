@@ -11,6 +11,8 @@ var collisionMap = [];
 var interactionObjects = [];
 var gameState = {};
 
+var walletAmt = 107;
+
 const MAPIDS = [
   "map0",
   "map1",

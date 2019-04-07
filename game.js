@@ -13,7 +13,7 @@ function gameInit() {
   // setMapData("map3");
   lockpickWindow = new LockpickWindow(6, () => player.inventory = 20); // remove me
   lockpickWindow.active = false // remove me
-  makeEnemies(1)
+  makeEnemies(randInt(1,4))
 }
 
 // gameInit();

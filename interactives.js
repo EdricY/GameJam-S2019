@@ -1,17 +1,20 @@
 const safe_open = document.getElementById('safe-open');
 const register_open = document.getElementById('register-open');
 
+var onelesspin = false;
+
 function LockBox(x, y, tileID) {
   this.x = x;
   this.y = y;
   this.pins = randInt(2,7);
+  if (onelesspin) this.pins--;
   this.message = "Lockpick [Space]"
   this.done = false;
   if (tileID == 20) { //safe
     this.interact = function() {
       lockpickWindow = new LockpickWindow(this.pins, () => {
         this.done = true;
-        player.inventory = 20;
+        player.inventory = randInt(200,1000);
         let r = Math.floor(y / TILESIZE);
         let c = Math.floor(x / TILESIZE);
         collisionctx.clearRect(c * TILESIZE, r * TILESIZE, TILESIZE, TILESIZE);
@@ -22,7 +25,7 @@ function LockBox(x, y, tileID) {
     this.interact = function() {
       lockpickWindow = new LockpickWindow(this.pins, () => {
         this.done = true;
-        player.inventory = 20;
+        player.inventory = randInt(300, 800);
         let r = Math.floor(y / TILESIZE);
         let c = Math.floor(x / TILESIZE);
         collisionctx.clearRect(c * TILESIZE, r * TILESIZE, TILESIZE, TILESIZE);
@@ -61,8 +64,9 @@ function Entrance(x, y) {
   this.y = y;
   this.done = false;
   this.message = "";
-  setTimeout(() => this.message = "Return Home [Space]", 1000); //debug change me
+  setTimeout(() => this.message = "Return Home [Space]", 10000); //debug change me
   this.interact = function() {
+    walletAmt += player.inventory;
     returnToLanding();
   }
 }

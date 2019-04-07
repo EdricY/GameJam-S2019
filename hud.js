@@ -15,7 +15,8 @@ function drawHUD(ctx) {
   //health
   ctx.strokeRect(50, 512+8+15, maxHealth, 15)
   ctx.fillStyle = "red";
-  ctx.fillRect(50, 512+8+15, Math.round(player.health), 15)
+  let hp = Math.max(Math.round(player.health), 0);
+  ctx.fillRect(50, 512+8+15, hp, 15)
   ctx.fillStyle = "white";
   ctx.fillText("HP", 30, 512+8+15+10)
 
