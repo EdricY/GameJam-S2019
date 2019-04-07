@@ -41,6 +41,7 @@ function LockpickWindow(numPins, callback) {
     }
 
     if (lockPickProgress >= numPins) { //success!
+      play_open_noise();
       if (this.holdTimer > 0) this.holdTimer--;
       else {
         this.active = false;
@@ -52,13 +53,13 @@ function LockpickWindow(numPins, callback) {
 
     let next = this.pattern[lockPickProgress];
     if (holdMode) {
-      play_lock_picking_noise();
       let required = this.pattern.slice(0, lockPickProgress)
       for (let i = 1; i <= 6; i++) {
         let keycode = customKeycodes[i-1];
         if (required.includes(i)) {
           if (!keys[keycode]) {
             lockPickProgress = 0;
+            play_lock_picking_noise();
           }
         } else {
           if (i == next) {
@@ -68,18 +69,23 @@ function LockpickWindow(numPins, callback) {
           } else if (keys[keycode]) {
             this.chambers[lockPickProgress].pulse();
             lockPickProgress = 0;
+            play_lock_picking_noise();
           }
         }
       }
     } else {
-      play_lock_picking_noise();
+      // play_lock_picking_noise();
       for (let i = 1; i <= 6; i++) {
         let keycode = customKeycodes[i-1];
         if (keys[keycode] && !lastKeys[keycode]) {
-          if (i == next) lockPickProgress++;
+          if (i == next) {
+            lockPickProgress++;
+            play_lock_picking_noise();
+          }
           else {
             this.chambers[lockPickProgress].pulse();
             lockPickProgress = 0;
+            play_lock_picking_noise();
           }
         }
       }

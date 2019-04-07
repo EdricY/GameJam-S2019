@@ -9,6 +9,7 @@ var player = new Player(0, 0);
 var lockpickWindow;
 
 function gameInit() {
+  play_background_music();
   // setMapData("map3");
   lockpickWindow = new LockpickWindow(6, () => player.inventory = 20); // remove me
   lockpickWindow.active = false // remove me
@@ -34,6 +35,8 @@ function gameDraw() {
 
 function gameUpdate() {
   player.update();
+  if (gameState.state == gameState.MENU) return;
+
   let len = enemies.length;
   for (let i = 0; i < len; i++) {
     enemies[i].update();
@@ -41,7 +44,7 @@ function gameUpdate() {
 
   if (alarm > 0) alarm --;
   else alarm = 0;
-  
+
 
   // len = interactionObjects.length;
   // for (let i = 0; i < len; i++) {
@@ -59,6 +62,10 @@ function tick() {
   lag += elapsed;
   while (lag >= MS_PER_UPDATE) {
     gameState.update();
+    if (gameState.state == gameState.MENU) {
+      requestAnimationFrame(tick); //awkward, sorry
+      return;
+    }
     lag -= MS_PER_UPDATE;
     redraw = true;
   }

@@ -127,6 +127,7 @@ gameState = {
     menuDiv.classList.add("nodisplay")
     instructionsDiv.classList.add("nodisplay")
     upgradesDiv.classList.add("nodisplay")
+    creditsDiv.classList.add("nodisplay")
   }
 }
 
@@ -143,6 +144,11 @@ function showMenu() {
 function showInstructions() {
   gameState.hideAll();
   instructionsDiv.classList.remove("nodisplay")
+}
+
+function showCredits() {
+  gameState.hideAll();
+  creditsDiv.classList.remove("nodisplay");
 }
 
 function showUpgrades() {
@@ -188,7 +194,8 @@ function squareonclick(e, mapID) {
   goBtn.disabled = true;
   setTimeout(() => {
     setMapData(mapID);
-    player = new Player(PLAYER_SPAWN_LOCATIONS[window.mapID].x, PLAYER_SPAWN_LOCATIONS[window.mapID].y)
+    player = new Player(PLAYER_SPAWN_LOCATIONS[window.mapID].x, PLAYER_SPAWN_LOCATIONS[window.mapID].y);
+    interactionObjects.push(new Entrance(player.x, player.y))
     previewctx.drawImage(floorCanvas, 0, 0);
     previewctx.drawImage(collisionCanvas, 0, 0);
     let divID = mapID + "-div";

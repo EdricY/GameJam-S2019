@@ -14,12 +14,23 @@ LOCK_PICKING.push(new Audio("resrc/lock_picking_3.wav"));
 
 function play_lock_picking_noise() {
   let song = randInt(0, 4);
-  LOCK_PICKING[song].play();
   LOCK_PICKING[song].pause();
+  LOCK_PICKING[song].play();
 }
 
 function play_injury_noise() {
   let song = randInt(0, 3);
-  INJURIES[song].play();
   INJURIES[song].pause();
+  INJURIES[song].play();
+}
+
+function play_open_noise() {
+  SAFE_OPENING.pause();
+  SAFE_OPENING.play();
+}
+
+function play_background_music() {
+  BACKGROUND.loop = true;
+  BACKGROUND.pause();
+  BACKGROUND.play();
 }
