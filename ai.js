@@ -1,4 +1,4 @@
-const enemies = [];
+var enemies = [];
 const PI = Math.PI;
 const TAU = 2 * PI;
 const VISHALFWIDTH = TAU / 12;
@@ -263,7 +263,7 @@ function LOSBullet(x, y, theta, owner) {
   this.x = x;
   this.y = y;
   this.theta = theta;
-  this.speed = 14;
+  this.speed = 12;
   this.owner = owner;
   this.dist = 0;
   this.update = function() {
@@ -298,8 +298,6 @@ function LOSBullet(x, y, theta, owner) {
     ctx.fill();
   }
 }
-
-
 
 /**
  * Get best direction to go in
@@ -346,6 +344,16 @@ function Bullet(x, y, t) {
     let vy = this.bulletSpeed * Math.sin(this.theta);
     this.x += vx;
     this.y += vy;
+    if (this.intersectsPlayer()) {
+      if(player.health > 0) {
+        Particles.explode(player.x, player.y, 'red', 20, 5)
+        play_injury_noise();
+      }
+      // if(player.health > 0) play_injury_noise();
+      player.health -= 20;
+      this.update = null;
+      return;
+    }
     let tile = getTileFromPos(mapData, this.x, this.y);
     if (FLOORTILES.includes(tile)) return;
     this.update = null;
@@ -360,8 +368,15 @@ function Bullet(x, y, t) {
     ctx.rotate(rotation);
     ctx.drawImage(bullet, -2, -3); //3x6
     ctx.resetTransform();
-
   }
+
+  this.intersectsPlayer = function() {
+    let dx = player.x - this.x;
+    let dy = player.y - this.y;
+    let distSq = dx*dx + dy*dy;
+    return distSq < PHSZ*PHSZ;
+  }
+
 }
 
 

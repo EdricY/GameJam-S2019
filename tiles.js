@@ -28,13 +28,13 @@ const TILES = {
   '20,0,0,255' : 21, //register
   '170,0,0,255' : 22,
   '0,21,145,255' : 23,
-  '64,74,64,255' : 24,
+  '64,74,64,255' : 24, //metal door
   '48,48,48,255' : 25,
   '0,38,255,255' : 26,
 };
 
 const FLOORTILES = [1, 7, 12];
-const LOCKEDTILES = [20, 21]
+const LOCKEDTILES = [20, 21, 24]
 
 const tileImgIDs = [
   "tile0",

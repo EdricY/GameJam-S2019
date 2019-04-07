@@ -34,3 +34,7 @@ function play_background_music() {
   BACKGROUND.pause();
   BACKGROUND.play();
 }
+
+function stop_background_music() {
+  BACKGROUND.pause();
+}

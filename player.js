@@ -30,15 +30,17 @@ const playerctx = playerCanvas.getContext('2d');
 const tempCanvas = document.getElementById("tempCanvas");
 const tempctx = tempCanvas.getContext('2d');
 
+var maxHealth = 100;
+var maxStamina = 120;
 
 function Player(x, y) {
   this.x = x;
   this.y = y;
   this.vx = 0;
   this.vy = 0;
-  this.health = 100;
-  this.maxStamina = 120;
-  this.stamina = this.maxStamina;
+  this.health = maxHealth;
+  this.deathTimer = 120;
+  this.stamina = maxStamina;
   this.speed = 4;
   this.basespeed = 4;
   this.speedy = false;
@@ -51,6 +53,12 @@ function Player(x, y) {
   this.actionTarget = null;
   this.draw = (ctx) => drawPlayer(ctx, this);
   this.update = function () {
+    if (player.health <= 0) {
+      this.deathTimer--;
+      if (this.deathTimer <= 0) {
+        returnToLanding();
+      }
+    }
     if (lockpickWindow.active) return;
     if (keys[90] && this.stamina > 0) { //Z
       this.speedy = true;
@@ -74,8 +82,8 @@ function Player(x, y) {
 
     if (!this.speedy) {
       this.stamina += .2;
-      if (this.stamina > this.maxStamina) {
-        this.stamina = this.maxStamina;
+      if (this.stamina > maxStamina) {
+        this.stamina = maxStamina;
       }
     }
 
@@ -148,7 +156,7 @@ function Player(x, y) {
     }
 
     //interactions
-    if (this.inventory) return;
+    // if (this.inventory) return;
     this.actionTarget = closestInteractionObject(this);
     if (this.actionTarget) {
       this.message = this.actionTarget.message;
@@ -163,6 +171,7 @@ function Player(x, y) {
 }
 
 function drawPlayer(ctx, player) {
+  if (player.health <= 0) return;
   let f_x = Math.round(player.x)
   let f_y = Math.round(player.y)
   let left = f_x - PLAYERSIZE; //awkward

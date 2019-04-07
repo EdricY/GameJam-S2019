@@ -54,6 +54,30 @@
   </div>
   <div id="upgradesDiv" class="outer nodisplay">
     <h1>The Market</h1>
+    <p style="font-size: 2px;">*Per Electronic Arts (EA)'s profitable game platform philosophy we will be charging inordinate amounts of money  for you to access this DLC</p>
+    <h2>New DLC coming soon!*</h2>
+    <span style="font-size: 32px;">Wallet: $<div id="wallet"></div></span>
+    <p></p>
+    <div class="purchase">
+      Increased Stamina ($500)
+      <button class="menuButton" onclick()="">Buy</button>
+    </div>
+    <div class="purchase">
+      Decreased Guard Vision ($500)
+      <button class="menuButton" onclick()="">Buy</button>
+    </div>
+    <div class="purchase">
+      Increased Health ($500)
+      <button class="menuButton" onclick()="">Buy</button>
+    </div>
+    <div class="purchase">
+      Decreased Guard Speed ($500)
+      <button class="menuButton" onclick()="">Buy</button>
+    </div>
+    <div class="purchase">
+      One Less Lock Pin ($1000)
+      <button class="menuButton" onclick()="">Buy</button>
+    </div>
     <button class="menuButton" onclick="showLanding()">Back</button>
   </div>
   <div id="canvasContainer" class="outer nodisplay">
@@ -65,6 +89,10 @@
 <canvas id="floorCanvas" hidden width="768" height="512"></canvas>
 <canvas id="playerCanvas" hidden width="768" height="512"></canvas>
 <canvas id="tempCanvas" hidden width="768" height="512"></canvas>
+
+<script type="text/javascript">
+  document.getElementById("wallet")[0].innerHTML = 42;
+</script>
 
 <img hidden id='map0' src='resrc/map0.png' alt='img'>
 <img hidden id='map1' src='resrc/map1.png' alt='img'>
@@ -137,6 +165,7 @@
 <script src="interactives.js" defer></script>
 <script src="ai.js" defer></script>
 <script src="hud.js" defer></script>
+<script src="particles.js" defer></script>
 <script src="game.js" defer></script>
 
 </html>

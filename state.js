@@ -67,7 +67,7 @@ const ENEMY_SPAWN_LOCATIONS = {
       {x : 7  * TILE_OFFSET, y : 26 * TILE_OFFSET},
   ],
   7: [
-      {x : 10 * TILE_OFFSET, y : 11 * TILE_OFFSET},
+      {x : 14 * TILE_OFFSET, y : 1 * TILE_OFFSET},
       {x : 38 * TILE_OFFSET, y : 31 * TILE_OFFSET},
       {x : 5 * TILE_OFFSET, y : 8 * TILE_OFFSET},
       {x : 25 * TILE_OFFSET, y : 0 * TILE_OFFSET},
@@ -205,9 +205,33 @@ function squareonclick(e, mapID) {
 
 }
 
-
-
 function selectSquare(divID) {
   for (let child of levelSquares.children) child.classList.remove('squareSelected')
   document.getElementById(divID).classList.add('squareSelected')
+}
+
+function returnToLanding() {
+  mapData = [];
+  enemies = [];
+  collisionMap = [];
+  interactionObjects = [];
+  gameState.update = function() {};
+  gameState.draw = function() {};
+  gameState.state = gameState.MENU;
+  goBtn.disabled = true;
+  goBtn.blur();
+  setTimeout(() => {
+    alarm = 0;
+    let mapID = "map" + window.mapID
+    setMapData(mapID);
+    player = new Player(PLAYER_SPAWN_LOCATIONS[window.mapID].x, PLAYER_SPAWN_LOCATIONS[window.mapID].y);
+    interactionObjects.push(new Entrance(player.x, player.y))
+    previewctx.drawImage(floorCanvas, 0, 0);
+    previewctx.drawImage(collisionCanvas, 0, 0);
+    let divID = mapID + "-div";
+    selectSquare(divID);
+    goBtn.blur();
+    goBtn.disabled = false;
+  }, 0)
+  showLanding();
 }

@@ -1,6 +1,6 @@
 html {
   margin: 0 auto;
-  max-width: 900px;  
+  max-width: 900px;
 }
 body {
   background-color: #111;
@@ -30,6 +30,32 @@ body {
   background-color: #DDD;
   border: #999 solid 3px;
   border-radius: 20px;
+}
+
+.buyButton {
+  margin: 15px;
+  padding: 3px;
+  width: 100px;
+  background-color: #DDD;
+  border: #999 solid 3px;
+  border-radius: 20px;
+}
+
+.purchase {
+  padding: auto;
+  width: 75%;
+  display: flex;
+  font-size: 32px;
+  /* flex-flow: row; */
+  justify-content: space-between;
+  /* border: 1px solid red; */
+  text-align: center;
+}
+
+.market {
+  width: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .outer {

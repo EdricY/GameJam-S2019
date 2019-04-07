@@ -23,6 +23,7 @@ function gameDraw() {
   ctx.drawImage(floorCanvas, 0, 0);
   ctx.drawImage(collisionCanvas, 0, 0);
   player.draw(ctx);
+  Particles.draw(ctx, 0);
   for (let en of enemies) {
     en.draw(ctx);
   }
@@ -34,8 +35,12 @@ function gameDraw() {
 }
 
 function gameUpdate() {
+  Particles.update();
   player.update();
-  if (gameState.state == gameState.MENU) return;
+  if (gameState.state == gameState.MENU) {
+    stop_background_music();
+    return;
+  }
 
   let len = enemies.length;
   for (let i = 0; i < len; i++) {
