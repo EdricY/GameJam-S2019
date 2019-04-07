@@ -13,6 +13,8 @@ var bulletSpread = .2;
 var alarmTime = 1000
 var alarm = 0;
 
+var aiDebug = false;
+
 const ENEMYIMGS = [
   document.getElementById("enemy_0"),
   document.getElementById("enemy_1"),
@@ -161,14 +163,15 @@ function Enemy(x, y) {
       b.draw(ctx);
     }
 
+    if (aiDebug) {
+      for (let b of this.pfBullets) { //debug only
+        b.draw(ctx);
+      }
 
-    // for (let b of this.pfBullets) { //debug only
-    //   b.draw(ctx);
-    // }
-
-    // for (let b of this.losBullets) { //debug only
-    //   b.draw(ctx);
-    // }
+      for (let b of this.losBullets) { //debug only
+        b.draw(ctx);
+      }
+    }
 
 
   }
