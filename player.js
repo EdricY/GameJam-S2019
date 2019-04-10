@@ -27,8 +27,6 @@ const PLAYERBAGIMGS = [
 
 const playerCanvas = document.getElementById("playerCanvas");
 const playerctx = playerCanvas.getContext('2d');
-const tempCanvas = document.getElementById("tempCanvas");
-const tempctx = tempCanvas.getContext('2d');
 
 var maxHealth = 100;
 var maxStamina = 120;
@@ -59,7 +57,13 @@ function Player(x, y) {
         returnToLanding();
       }
     }
-    if (lockpickWindow.active) return;
+    if (lockpickWindow.active) {
+      this.stamina += .2;
+      if (this.stamina > maxStamina) {
+        this.stamina = maxStamina;
+      }
+      return;
+    }
     if (keys[90] && this.stamina > 0) { //Z
       this.speedy = true;
       this.speed = this.basespeed * 1.5;
@@ -183,18 +187,13 @@ function drawPlayer(ctx, player) {
   if (player.inventory) img = PLAYERBAGIMGS[frame];
 
   if (player.speedy) {
-    tempctx.globalAlpha = 1;
-    tempctx.globalCompositeOperation = 'source-over';
-    tempctx.drawImage(playerCanvas, 0, 0);
-    tempctx.globalAlpha = .3;
-    tempctx.globalCompositeOperation = 'source-atop';
-    tempctx.drawImage(floorCanvas, 0, 0);
-    tempctx.drawImage(collisionCanvas, 0, 0);
-    playerctx.clearRect(0, 0, W, H)
-    playerctx.drawImage(tempCanvas, 0, 0)
-    playerctx.globalAlpha = 1;
+    playerctx.save();
+    playerctx.globalAlpha = .3;
+    playerctx.globalCompositeOperation = 'source-atop';
+    playerctx.drawImage(floorCanvas, 0, 0);
+    playerctx.drawImage(collisionCanvas, 0, 0);
+    playerctx.restore();
   } else {
-    tempctx.clearRect(0, 0, W, H)
     playerctx.clearRect(0, 0, W, H)
   }
   playerctx.translate(f_x, f_y);
