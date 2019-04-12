@@ -6,13 +6,11 @@ var lag = 0;
 var redraw = false;
 
 var player = new Player(0, 0);
-var lockpickWindow;
+var lockpickWindow = {};
 
 function gameInit() {
   play_background_music();
   // setMapData("map3");
-  lockpickWindow = new LockpickWindow(6, () => player.inventory = 20); // remove me
-  lockpickWindow.active = false // remove me
   makeEnemies(randInt(1,4))
 }
 

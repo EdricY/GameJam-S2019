@@ -25,19 +25,22 @@ const ENEMYIMGS = [
 function Enemy(x, y) {
   this.x = x;
   this.y = y;
-  this.action = 0; // 0:starts walking; 1:seeking; 2:turning
-  this.timer = randInt(5, 35);
+  this.action = 0; // 0:walking, 1:pathfinding, 2:turning, 3:chasing
+  this.alerted = false; 
+  this.timer = 30;
   this.theta = Math.random() * TAU - PI;
   this.thetaGoal = this.theta;
   this.basespeed = 3;
   this.animationFrame = 0;
   this.speed = this.basespeed;
   this.shootTimer = 0;
-  this.reloadTime = 30;
+  this.reloadTime = 25;
+  this.questionMarkTimer = 0;
   this.rotateDirection = getRotationDirection();
   this.pfBullets = [];
   this.losBullets = [];
   this.bullets = [];
+  //TODO: make gunPosition function
   this.update = function () {
     this.shootTimer--;
     if (this.shootTimer < 0) this.shootTimer = 0;
@@ -95,7 +98,8 @@ function Enemy(x, y) {
       }
     }
 
-
+    this.questionMarkTimer--;
+    //do action
     if (this.action == 0) { //moving
       let collided = checkCollision(this);
       if (collided == true) {
@@ -116,14 +120,15 @@ function Enemy(x, y) {
         this.animationFrame = 0;
       }
 
-    } else if (this.action == 1) {
+    } else if (this.action == 1) { //pathfinding
       if (this.timer == 30) this.shootPFBullets();
       if (this.pfBullets.length <= 0 || this.timer <= 0) {
+        this.timer = 0;
         this.action = 2;
       }
       this.timer--;
       this.animationFrame = 0;
-    } else if (this.action == 2) {
+    } else if (this.action == 2) { //turning
       let diff1 = this.thetaGoal - this.theta;
       let diff2 = diff1 - TAU;
       let diff3 = diff1 + TAU;
@@ -137,10 +142,24 @@ function Enemy(x, y) {
       } else {
         this.theta = this.thetaGoal;
         this.action = 0;
+        if (this.timer > 0) this.action = 3;
       }
       this.animationFrame = 0;
+    } else if (this.action == 3) { //chasing
+      let collided = checkCollision(this);
+      this.animationFrame += .2;
+      if (this.animationFrame >= 4){
+        this.animationFrame = 0;
+      }
+      this.timer--;
+      if (this.timer <= 0) {
+        this.alerted = false;
+        this.action = 1;
+        this.questionMarkTimer = 20;
+      }
     }
   }
+
   this.draw = function(ctx) {
     // ctx.fillStyle = "blue";
     // ctx.fillRect(this.x - PHSZ, this.y - PHSZ, 16, 16);
@@ -158,6 +177,16 @@ function Enemy(x, y) {
     ctx.drawImage(img, -PLAYERSIZE, -PLAYERSIZE);
     this.drawVisibility(ctx);
     ctx.resetTransform();
+
+    if (this.alerted) {
+      ctx.fillStyle = "red"
+      ctx.font = "20px serif"
+      ctx.fillText("!", f_x, f_y - PLAYERSIZE);
+    } else if (this.questionMarkTimer > 0) {
+      ctx.fillStyle = "red"
+      ctx.font = "20px serif"
+      ctx.fillText("?", f_x, f_y - PLAYERSIZE);
+    }
 
     for (let b of this.bullets) {
       b.draw(ctx);
@@ -217,10 +246,10 @@ function Enemy(x, y) {
         this.bullets.push(new Bullet(bx, by, theta))
         this.shootTimer = this.reloadTime;
       }
-
-      this.action = 2
+      this.alerted = true;
+      this.timer = 30;
+      this.action = 2;
       this.thetaGoal = theta;
-
     }
   }
 
