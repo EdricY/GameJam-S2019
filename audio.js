@@ -1,16 +1,19 @@
-const INJURIES = [];
-const LOCK_PICKING = [];
-const SAFE_OPENING = new Audio("resrc/safe_opening.wav");
-const ALARM = new Audio("resrc/alarm_sound.wav");
-const BACKGROUND = new Audio("resrc/Lee_Rosevere_-_12_-_Dont_Trust_the_Cloud.wav");
+const SAFE_OPENING = document.getElementById("safe_opening");
+const ALARM = document.getElementById("alarm_sound");
+const BACKGROUND = document.getElementById("background_music");
 
-INJURIES.push(new Audio("resrc/injury_0.wav"));
-INJURIES.push(new Audio("resrc/injury_1.wav"));
-INJURIES.push(new Audio("resrc/injury_2.wav"));
-LOCK_PICKING.push(new Audio("resrc/lock_picking_0.wav"));
-LOCK_PICKING.push(new Audio("resrc/lock_picking_1.wav"));
-LOCK_PICKING.push(new Audio("resrc/lock_picking_2.wav"));
-LOCK_PICKING.push(new Audio("resrc/lock_picking_3.wav"));
+const injury_0 = document.getElementById("injury_0");
+const injury_1 = document.getElementById("injury_1");
+const injury_2 = document.getElementById("injury_2");
+const INJURIES = [injury_0, injury_1, injury_2];
+
+
+const lock_picking_0 = document.getElementById("lock_picking_0");
+const lock_picking_1 = document.getElementById("lock_picking_1");
+const lock_picking_2 = document.getElementById("lock_picking_2");
+const lock_picking_3 = document.getElementById("lock_picking_3");
+const LOCK_PICKING = [lock_picking_0, lock_picking_1, lock_picking_2, lock_picking_3];
+
 
 function play_lock_picking_noise() {
   let song = randInt(0, 4);
