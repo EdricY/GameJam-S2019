@@ -14,7 +14,7 @@ function LockBox(x, y, tileID) {
     this.interact = function() {
       lockpickWindow = new LockpickWindow(this.pins, () => {
         this.done = true;
-        player.inventory = randInt(200,1000);
+        player.inventory += randInt(200,1000);
         let r = Math.floor(y / TILESIZE);
         let c = Math.floor(x / TILESIZE);
         collisionctx.clearRect(c * TILESIZE, r * TILESIZE, TILESIZE, TILESIZE);
@@ -25,7 +25,7 @@ function LockBox(x, y, tileID) {
     this.interact = function() {
       lockpickWindow = new LockpickWindow(this.pins, () => {
         this.done = true;
-        player.inventory = randInt(300, 800);
+        player.inventory += randInt(300, 800);
         let r = Math.floor(y / TILESIZE);
         let c = Math.floor(x / TILESIZE);
         collisionctx.clearRect(c * TILESIZE, r * TILESIZE, TILESIZE, TILESIZE);
