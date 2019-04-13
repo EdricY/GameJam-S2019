@@ -429,6 +429,7 @@ function resetAI(person) {
  */
 function makeEnemies(num) {
   for (let i = 0; i < num; i++) {
+    // TODO: update mapID properly (or use something else)
     let pos = ENEMY_SPAWN_LOCATIONS[mapID][randInt(0, 4)]
     enemies.push(new Enemy(pos.x, pos.y));
   }
