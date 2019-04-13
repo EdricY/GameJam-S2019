@@ -73,7 +73,7 @@ const ENEMY_SPAWN_LOCATIONS = {
       {x : 25 * TILE_OFFSET, y : 2 * TILE_OFFSET},
   ],
   8: [
-      {x : 7 * TILE_OFFSET, y : 0 * TILE_OFFSET},
+      {x : 7 * TILE_OFFSET, y : 1 * TILE_OFFSET},
       {x : 7 * TILE_OFFSET, y : 31 * TILE_OFFSET},
       {x : 47 * TILE_OFFSET, y : 24 * TILE_OFFSET},
       {x : 35 * TILE_OFFSET, y : 2 * TILE_OFFSET},
@@ -81,7 +81,7 @@ const ENEMY_SPAWN_LOCATIONS = {
   9: [
       {x : 40 * TILE_OFFSET, y : 5 * TILE_OFFSET},
       {x : 6 * TILE_OFFSET, y : 2 * TILE_OFFSET},
-      {x : 0 * TILE_OFFSET, y : 21 * TILE_OFFSET},
+      {x : 1 * TILE_OFFSET, y : 21 * TILE_OFFSET},
       {x : 46 * TILE_OFFSET, y : 25 * TILE_OFFSET},
   ],
   10: [
