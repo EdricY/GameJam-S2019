@@ -6,7 +6,7 @@ var lag = 0;
 var redraw = false;
 
 var player = new Player(0, 0);
-var lockpickWindow = {};
+var lockpickWindow = null;
 
 function gameInit() {
   play_background_music();
@@ -27,7 +27,7 @@ function gameDraw() {
   }
   ctx.fillStyle = "yellow";
   // ctx.fillText(player.theta, 100,10);
-  if (lockpickWindow.active) lockpickWindow.draw(ctx);
+  if (lockpickWindow) lockpickWindow.draw(ctx);
 
   drawHUD(ctx);
 }
@@ -54,7 +54,7 @@ function gameUpdate() {
   //   interactionObjects[i].update();
   // }
 
-  if (lockpickWindow.active) lockpickWindow.update();
+  if (lockpickWindow) lockpickWindow.update();
   lastKeys = JSON.parse(JSON.stringify(keys)); //deep copy
 }
 

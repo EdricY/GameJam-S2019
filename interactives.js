@@ -10,52 +10,52 @@ function LockBox(x, y, tileID) {
   if (onelesspin) this.pins--;
   this.message = "Lockpick [Space]"
   this.done = false;
+
+  this.callback = () => {};
   if (tileID == 20) { //safe
-    this.interact = function() {
-      lockpickWindow = new LockpickWindow(this.pins, () => {
-        this.done = true;
-        player.inventory += randInt(200,1000);
-        let r = Math.floor(y / TILESIZE);
-        let c = Math.floor(x / TILESIZE);
-        collisionctx.clearRect(c * TILESIZE, r * TILESIZE, TILESIZE, TILESIZE);
-        collisionctx.drawImage(safe_open,c * TILESIZE, r * TILESIZE);
-      });
-    }
+    this.callback = () => {
+      this.done = true;
+      player.inventory += randInt(200,1000);
+      let r = Math.floor(y / TILESIZE);
+      let c = Math.floor(x / TILESIZE);
+      collisionctx.clearRect(c * TILESIZE, r * TILESIZE, TILESIZE, TILESIZE);
+      collisionctx.drawImage(safe_open,c * TILESIZE, r * TILESIZE);
+    };
   } else if (tileID == 21) { //register
-    this.interact = function() {
-      lockpickWindow = new LockpickWindow(this.pins, () => {
-        this.done = true;
-        player.inventory += randInt(300, 800);
-        let r = Math.floor(y / TILESIZE);
-        let c = Math.floor(x / TILESIZE);
-        collisionctx.clearRect(c * TILESIZE, r * TILESIZE, TILESIZE, TILESIZE);
-        collisionctx.drawImage(register_open, c * TILESIZE, r * TILESIZE);
-      });
-    }
-  } else if (tileID == 24) { //metal door
-    this.interact = function() {
-       // lockpickWindow = new LockpickWindow(this.pins, () => {
-        this.done = true;
-        let r = Math.floor(y / TILESIZE);
-        let c = Math.floor(x / TILESIZE);
-        collisionctx.clearRect(c * TILESIZE, r * TILESIZE, TILESIZE, TILESIZE);
+    this.callback = () => {
+      this.done = true;
+      player.inventory += randInt(300, 800);
+      let r = Math.floor(y / TILESIZE);
+      let c = Math.floor(x / TILESIZE);
+      collisionctx.clearRect(c * TILESIZE, r * TILESIZE, TILESIZE, TILESIZE);
+      collisionctx.drawImage(register_open, c * TILESIZE, r * TILESIZE);
+    };
+  } else if (tileID == 24) { // metal door
+    this.callback = () => {
+      this.done = true;
+      let r = Math.floor(y / TILESIZE);
+      let c = Math.floor(x / TILESIZE);
+      collisionctx.clearRect(c * TILESIZE, r * TILESIZE, TILESIZE, TILESIZE);
 
-        collisionMap[r][c] = recentFloorTileID;
-        mapData[r][c] = recentFloorTileID;
+      collisionMap[r][c] = recentFloorTileID;
+      mapData[r][c] = recentFloorTileID;
 
-        let raw_collision_data = collisionctx.getImageData(0, 0, W, H);
-        raw_collision_data = raw_collision_data.data;
-        collisionMap = [];
-        for (let y = 0; y < H; y++) {
-          collisionMap.push([])
-          for (let x = 0; x < W; x++) {
-            let pos = 4 * (x + y * W) + 3;
-            collisionMap[y].push(raw_collision_data[pos] > 0)
-          }
+      let raw_collision_data = collisionctx.getImageData(0, 0, W, H);
+      raw_collision_data = raw_collision_data.data;
+      collisionMap = [];
+      for (let y = 0; y < H; y++) {
+        collisionMap.push([])
+        for (let x = 0; x < W; x++) {
+          let pos = 4 * (x + y * W) + 3;
+          collisionMap[y].push(raw_collision_data[pos] > 0)
         }
-
-      // });
+      }
     }
+  }
+  this.lockpickWindow = new LockpickWindow(this.pins, this.callback);
+  this.interact = () => {
+    lockpickWindow = this.lockpickWindow;
+    lockpickWindow.active = true;
   }
 }
 

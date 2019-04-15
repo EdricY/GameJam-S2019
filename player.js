@@ -57,7 +57,7 @@ function Player(x, y) {
         returnToLanding();
       }
     }
-    if (lockpickWindow.active) {
+    if (lockpickWindow && lockpickWindow.active) {
       this.stamina += .2;
       if (this.stamina > maxStamina) {
         this.stamina = maxStamina;

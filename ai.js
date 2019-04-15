@@ -379,12 +379,11 @@ function Bullet(x, y, t) {
     this.x += vx;
     this.y += vy;
     if (this.intersectsPlayer()) {
-      if(player.health > 0) {
+      if (player.health > 0) {
         Particles.explode(player.x, player.y, 'red', 20, 5)
         play_injury_noise();
+        player.health -= 20;
       }
-      // if(player.health > 0) play_injury_noise();
-      player.health -= 20;
       this.update = null;
       return;
     }

@@ -15,10 +15,15 @@ function LockpickWindow(numPins, callback) {
   let fullwidth = PINW * numPins;
   let firstx = W / 2 - fullwidth / 2;
   for (let i = 0; i < numPins; i++) {
-    this.chambers.push(new LockChamber(firstx + i * PINW, i));
+    let pinSolution = this.pattern[i];
+    let lowest = (pinSolution - 1) * 2;
+    let highest = lowest + 3;
+    let offset = randInt(lowest, highest + 1);
+    this.chambers.push(new LockChamber(firstx + i * PINW, i, offset));
   }
 
   this.draw = function (ctx) {
+    if (!this.active) return;
     let temp = ctx.globalAlpha;
     ctx.globalAlpha = .7 - (.7*(1-(this.holdTimer/30)));
     ctx.fillStyle = "black"
@@ -30,10 +35,14 @@ function LockpickWindow(numPins, callback) {
   }
 
 
-  this.update = function () {
+  this.update = function() {
+    if (!this.active) return;
     if (keys[27]) { //escape
       this.active = false;
       lockPickProgress = 0;
+      for (let i = 0; i < numPins; i++) {
+        this.chambers[i].reset();
+      }
       return;
     }
     for (let i = 0; i < numPins; i++) {
@@ -101,12 +110,13 @@ function getRandomPattern(numPins) {
   return shuffle([1, 2, 3, 4, 5, 6]).slice(0, numPins);
 }
 
-function LockChamber(x, seq) {
+function LockChamber(x, seq, pinOffset=null) {
   this.seq = seq;
   this.w = PINW;
   this.h = 96;
   this.y = H / 2 - this.h / 2;
-  this.pinStart = this.y - randInt(0, 10);
+  if (pinOffset) this.pinStart = this.y - pinOffset
+  else this.pinStart = this.y - randInt(0, 12);
   this.pinY = this.pinStart;
   this.pinYGoal = this.pinY;
   this.x = x;
@@ -135,5 +145,10 @@ function LockChamber(x, seq) {
 
   this.pulse = function () {
     this.pulseTimer = 15;
+  }
+  this.reset = function() {
+    this.pinY = this.pinStart;
+    this.pinYGoal = this.pinStart;
+    this.pulseTimer = 0;
   }
 }
