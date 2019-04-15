@@ -56,6 +56,7 @@ function Player(x, y) {
       if (this.deathTimer <= 0) {
         returnToLanding();
       }
+      return;
     }
     if (lockpickWindow && lockpickWindow.active) {
       this.stamina += .2;

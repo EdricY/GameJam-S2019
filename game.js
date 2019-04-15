@@ -35,10 +35,6 @@ function gameDraw() {
 function gameUpdate() {
   Particles.update();
   player.update();
-  if (gameState.state == gameState.MENU) {
-    stop_background_music();
-    return;
-  }
 
   let len = enemies.length;
   for (let i = 0; i < len; i++) {
@@ -47,12 +43,6 @@ function gameUpdate() {
 
   if (alarm > 0) alarm --;
   else alarm = 0;
-
-
-  // len = interactionObjects.length;
-  // for (let i = 0; i < len; i++) {
-  //   interactionObjects[i].update();
-  // }
 
   if (lockpickWindow) lockpickWindow.update();
   lastKeys = JSON.parse(JSON.stringify(keys)); //deep copy
@@ -66,6 +56,7 @@ function tick() {
   while (lag >= MS_PER_UPDATE) {
     gameState.update();
     if (gameState.state == gameState.MENU) {
+      stop_background_music();
       requestAnimationFrame(tick); //awkward, sorry
       return;
     }
