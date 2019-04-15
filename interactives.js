@@ -6,13 +6,12 @@ var onelesspin = false;
 function LockBox(x, y, tileID) {
   this.x = x;
   this.y = y;
-  this.pins = randInt(2,7);
-  if (onelesspin) this.pins--;
   this.message = "Lockpick [Space]"
   this.done = false;
 
   this.callback = () => {};
   if (tileID == 20) { //safe
+    this.pins = randInt(3,7);
     this.callback = () => {
       this.done = true;
       player.inventory += randInt(200,1000);
@@ -22,6 +21,7 @@ function LockBox(x, y, tileID) {
       collisionctx.drawImage(safe_open,c * TILESIZE, r * TILESIZE);
     };
   } else if (tileID == 21) { //register
+    this.pins = randInt(3,6);
     this.callback = () => {
       this.done = true;
       player.inventory += randInt(300, 800);
@@ -31,6 +31,7 @@ function LockBox(x, y, tileID) {
       collisionctx.drawImage(register_open, c * TILESIZE, r * TILESIZE);
     };
   } else if (tileID == 24) { // metal door
+    this.pins = randInt(2,4);
     this.callback = () => {
       this.done = true;
       let r = Math.floor(y / TILESIZE);
@@ -52,6 +53,9 @@ function LockBox(x, y, tileID) {
       }
     }
   }
+
+  if (onelesspin) this.pins--;
+
   this.lockpickWindow = new LockpickWindow(this.pins, this.callback);
   this.interact = () => {
     lockpickWindow = this.lockpickWindow;

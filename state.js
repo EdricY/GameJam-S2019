@@ -25,10 +25,10 @@ const PLAYER_SPAWN_LOCATIONS = {
 
 const ENEMY_SPAWN_LOCATIONS = {
   0: [
-      {x : 22 * TILE_OFFSET, y : 13 * TILE_OFFSET},
-      {x : 22 * TILE_OFFSET, y : 13 * TILE_OFFSET},
-      {x : 22 * TILE_OFFSET, y : 13 * TILE_OFFSET},
-      {x : 22 * TILE_OFFSET, y : 13 * TILE_OFFSET},
+      {x : 22 * TILE_OFFSET, y : 16 * TILE_OFFSET},
+      {x : 22 * TILE_OFFSET, y : 16 * TILE_OFFSET},
+      {x : 22 * TILE_OFFSET, y : 16 * TILE_OFFSET},
+      {x : 22 * TILE_OFFSET, y : 16 * TILE_OFFSET},
   ],
   1: [
       {x:  4 * TILE_OFFSET, y : 12 * TILE_OFFSET},
@@ -196,10 +196,10 @@ function squareonclick(e, mapID) {
   goBtn.disabled = true;
   setTimeout(() => {
     setMapData(mapID);
-    player = new Player(PLAYER_SPAWN_LOCATIONS[window.mapID].x, PLAYER_SPAWN_LOCATIONS[window.mapID].y);
-    interactionObjects.push(new Entrance(player.x, player.y))
     previewctx.drawImage(floorCanvas, 0, 0);
     previewctx.drawImage(collisionCanvas, 0, 0);
+    player = new Player(PLAYER_SPAWN_LOCATIONS[window.mapID].x, PLAYER_SPAWN_LOCATIONS[window.mapID].y);
+    interactionObjects.push(new Entrance(player.x, player.y))
     let divID = mapID + "-div";
     selectSquare(divID);
     goBtn.disabled = false;

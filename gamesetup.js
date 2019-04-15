@@ -31,6 +31,8 @@ const MAPIDS = [
   "map14"
 ]
 
+//math!
+
 //returns x where min <= x < max
 function randInt(min, max) {
   let range = max - min;

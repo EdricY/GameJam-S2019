@@ -1,4 +1,5 @@
 function drawHUD(ctx) {
+  ctx.font = "14px serif"
   ctx.fillStyle = "#444";
   ctx.fillRect(0, H+1, W, 64);
   // width 20 margin 8
